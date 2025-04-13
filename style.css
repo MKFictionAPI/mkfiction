@@ -18,6 +18,7 @@ h1 {
     text-align: center;
     font-size: 20px;
     margin: 10px 0;
+    font-family: 'Cinzel', serif;
 }
 .controls {
     display: flex;
@@ -29,25 +30,40 @@ select, button {
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+}
+#bookSelectWelcome {
+    margin-bottom: 10px;
+    max-height: 150px;
+    overflow-y: auto;
 }
 #bookContent {
     border: 1px solid;
     padding: 15px;
-    min-height: 200px;
     font-size: 16px;
     white-space: pre-wrap;
     overflow-y: auto;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 5px;
-    transform-style: preserve-3d;
-    transition: opacity 0.6s ease, transform 0.6s ease;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    max-height: 60vh;
+    line-height: 1.5;
 }
-.buttons {
+.reader-controls {
     display: flex;
+    flex-direction: column;
     gap: 5px;
-    justify-content: center;
     margin-top: 10px;
+}
+#chapterSelect {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
 }
 #bookmarksList {
     margin-top: 10px;
@@ -55,12 +71,16 @@ select, button {
 .bookmark {
     padding: 5px;
     cursor: pointer;
-    color: blue;
+    color: #2a2a8e;
     display: flex;
     justify-content: space-between;
+    background: rgba(255, 255, 255, 0.7);
+    margin: 2px 0;
+    border-radius: 3px;
 }
 .bookmark:hover {
     text-decoration: underline;
+    background: rgba(255, 255, 255, 0.9);
 }
 .author-photo {
     display: block;
@@ -69,6 +89,43 @@ select, button {
     width: 150px;
     height: 150px;
     border: 3px solid #444;
+}
+p {
+    text-align: center;
+    margin: 10px 0;
+    font-style: italic;
+}
+body.light {
+    color: #333;
+    background: #f5f5f5;
+}
+body.light #bookContent {
+    border-color: #ccc;
+}
+body.light h1 {
+    color: #444;
+}
+body.dark {
+    color: #ddd;
+    background: #222;
+}
+body.dark .container {
+    background: rgba(0, 0, 0, 0.9);
+}
+body.dark #bookContent {
+    background: rgba(0, 0, 0, 0.95);
+    border-color: #555;
+}
+body.dark h1 {
+    color: #bbb;
+}
+body.dark select, body.dark button {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #555;
+    color: #ddd;
+}
+body.dark .bookmark {
+    background: rgba(0, 0, 0, 0.7);
 }
 @media (max-width: 600px) {
     body {
@@ -94,42 +151,15 @@ select, button {
         flex-direction: column;
         gap: 5px;
     }
-    .buttons {
-        flex-direction: column;
+    .reader-controls {
         gap: 5px;
     }
     #bookContent {
         padding: 10px;
         font-size: 14px;
-        min-height: 150px;
+        max-height: 50vh;
     }
-    #bookSelectWelcome {
+    #bookSelectWelcome, #chapterSelect {
         max-height: 120px;
     }
-}
-p {
-    text-align: center;
-    margin: 10px 0;
-}
-body.light {
-    background-color: #f5f5f5;
-    color: #333;
-}
-body.light #bookContent {
-    background-color: #fff;
-    border-color: #ccc;
-}
-body.light h1 {
-    color: #444;
-}
-body.dark {
-    background-color: #222;
-    color: #ddd;
-}
-body.dark #bookContent {
-    background-color: #333;
-    border-color: #555;
-}
-body.dark h1 {
-    color: #bbb;
 }
