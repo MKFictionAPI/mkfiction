@@ -29,7 +29,8 @@ WebApp.expand();
 function syncTheme() {
     const telegramTheme = WebApp.themeParams.bg_color?.toLowerCase() === '#212121' ? 'dark' : 'light';
     setTheme(telegramTheme);
-    document.getElementById('themeSelect')?.value = telegramTheme;
+    const themeSelect = document.getElementById('themeSelect');
+    if (themeSelect) themeSelect.value = telegramTheme;
 }
 
 function loadSettings() {
@@ -39,11 +40,13 @@ function loadSettings() {
         currentBook = settings.book || '';
         bookmarks = settings.bookmarks || [];
         if (currentBook && books[currentBook] !== undefined) {
-            document.getElementById('bookSelect').value = currentBook;
+            const bookSelect = document.getElementById('bookSelect');
+            if (bookSelect) bookSelect.value = currentBook;
             showReader();
             updateContent().then(() => {
                 const scrollPos = settings.scrollPos || 0;
-                document.getElementById('bookContent').scrollTop = scrollPos;
+                const content = document.getElementById('bookContent');
+                if (content) content.scrollTop = scrollPos;
             });
         } else {
             showWelcome();
@@ -56,7 +59,7 @@ function loadSettings() {
 
 function saveSettings() {
     const content = document.getElementById('bookContent');
-    const scrollPos = content.scrollTop || 0;
+    const scrollPos = content ? content.scrollTop : 0;
     localStorage.setItem(`mkfiction_${WebApp.initDataUnsafe.user?.id || 'guest'}`, JSON.stringify({
         book: currentBook,
         scrollPos: scrollPos,
@@ -74,6 +77,8 @@ function showWelcome() {
         currentBook = '';
         const content = document.getElementById('bookContent');
         if (content) content.textContent = '';
+    } else {
+        console.error('Welcome or reader page not found');
     }
 }
 
@@ -84,6 +89,8 @@ function showReader() {
         welcomePage.style.display = 'none';
         readerPage.style.display = 'block';
         updateContent();
+    } else {
+        console.error('Welcome or reader page not found');
     }
 }
 
@@ -91,18 +98,23 @@ function startReading() {
     const select = document.getElementById('bookSelectWelcome');
     if (select && select.value) {
         currentBook = select.value;
-        document.getElementById('bookSelect').value = currentBook;
+        const bookSelect = document.getElementById('bookSelect');
+        if (bookSelect) bookSelect.value = currentBook;
         showReader();
         saveSettings();
     } else {
         WebApp.showAlert('Выбери книгу, чтобы начать!');
+        console.error('Book not selected or select element missing');
     }
 }
 
 async function updateContent() {
     const content = document.getElementById('bookContent');
     const chapterSelect = document.getElementById('chapterSelect');
-    if (!content || !chapterSelect) return;
+    if (!content || !chapterSelect) {
+        console.error('Content or chapter select not found');
+        return;
+    }
     if (!currentBook) {
         content.textContent = '';
         chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
@@ -116,17 +128,21 @@ async function updateContent() {
         } catch (error) {
             content.textContent = 'Ошибка загрузки текста...';
             chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
+            console.error('Error loading book:', error);
             return;
         }
     }
     content.textContent = books[currentBook];
     updateChapters();
-    content.addEventListener('scroll', saveSettings);
+    content.addEventListener('scroll', saveSettings, { once: true });
 }
 
 function updateChapters() {
     const chapterSelect = document.getElementById('chapterSelect');
-    if (!chapterSelect) return;
+    if (!chapterSelect) {
+        console.error('Chapter select not found');
+        return;
+    }
     chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
     const text = books[currentBook];
     if (!text) return;
@@ -141,23 +157,33 @@ function updateChapters() {
     }
     chapterSelect.addEventListener('change', () => {
         if (chapterSelect.value) {
-            document.getElementById('bookContent').scrollTop = parseInt(chapterSelect.value);
+            const content = document.getElementById('bookContent');
+            if (content) {
+                content.scrollTop = parseInt(chapterSelect.value);
+                saveSettings();
+            }
+        }
+    });
+}
+
+const bookSelect = document.getElementById('bookSelect');
+if (bookSelect) {
+    bookSelect.addEventListener('change', function() {
+        if (this.value) {
+            currentBook = this.value;
+            showReader();
             saveSettings();
         }
     });
 }
 
-document.getElementById('bookSelect')?.addEventListener('change', function() {
-    if (this.value) {
-        currentBook = this.value;
-        showReader();
-    }
-});
-
-document.getElementById('themeSelect')?.addEventListener('change', function() {
-    setTheme(this.value);
-    saveSettings();
-});
+const themeSelect = document.getElementById('themeSelect');
+if (themeSelect) {
+    themeSelect.addEventListener('change', function() {
+        setTheme(this.value);
+        saveSettings();
+    });
+}
 
 function setTheme(theme) {
     document.body.className = theme;
@@ -166,6 +192,7 @@ function setTheme(theme) {
 function addBookmark() {
     if (!currentBook) return;
     const content = document.getElementById('bookContent');
+    if (!content) return;
     const scrollPos = content.scrollTop;
     const name = prompt('Назови закладку:', `Закладка ${scrollPos}`);
     if (name) {
@@ -198,8 +225,11 @@ function updateBookmarks() {
             const text = document.createElement('span');
             text.textContent = `📖 ${bm.name}`;
             text.onclick = () => {
-                document.getElementById('bookContent').scrollTop = bm.scrollPos;
-                saveSettings();
+                const content = document.getElementById('bookContent');
+                if (content) {
+                    content.scrollTop = bm.scrollPos;
+                    saveSettings();
+                }
             };
             const deleteBtn = document.createElement('span');
             deleteBtn.textContent = '🗑️';
@@ -216,9 +246,11 @@ const urlParams = new URLSearchParams(window.location.search);
 const bookFromUrl = urlParams.get('book');
 if (bookFromUrl && books[bookFromUrl] !== undefined) {
     currentBook = bookFromUrl;
-    document.getElementById('bookSelect').value = currentBook;
+    const bookSelect = document.getElementById('bookSelect');
+    if (bookSelect) bookSelect.value = currentBook;
     showReader();
 } else {
     showWelcome();
 }
+
 loadSettings();
