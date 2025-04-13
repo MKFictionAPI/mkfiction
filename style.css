@@ -71,9 +71,40 @@ select, button {
     border: 3px solid #444;
 }
 @media (max-width: 600px) {
+    body {
+        padding: 5px;
+    }
+    .container {
+        padding: 5px;
+    }
+    h1 {
+        font-size: 16px;
+        margin: 5px 0;
+    }
     .author-photo {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
+    }
+    select, button {
+        font-size: 11px;
+        padding: 5px;
+        width: 100%;
+    }
+    .controls {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+    #bookContent {
+        padding: 10px;
+        font-size: 14px;
+        min-height: 150px;
+    }
+    #bookSelectWelcome {
+        max-height: 120px;
     }
 }
 p {
