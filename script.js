@@ -56,7 +56,7 @@ function loadSettings() {
 
 function saveSettings() {
     const content = document.getElementById('bookContent');
-    const scrollPos = content.scrollTop;
+    const scrollPos = content.scrollTop || 0;
     localStorage.setItem(`mkfiction_${WebApp.initDataUnsafe.user?.id || 'guest'}`, JSON.stringify({
         book: currentBook,
         scrollPos: scrollPos,
@@ -66,21 +66,30 @@ function saveSettings() {
 }
 
 function showWelcome() {
-    document.getElementById('welcomePage').style.display = 'block';
-    document.getElementById('readerPage').style.display = 'none';
-    currentBook = '';
-    document.getElementById('bookContent').textContent = '';
+    const welcomePage = document.getElementById('welcomePage');
+    const readerPage = document.getElementById('readerPage');
+    if (welcomePage && readerPage) {
+        welcomePage.style.display = 'block';
+        readerPage.style.display = 'none';
+        currentBook = '';
+        const content = document.getElementById('bookContent');
+        if (content) content.textContent = '';
+    }
 }
 
 function showReader() {
-    document.getElementById('welcomePage').style.display = 'none';
-    document.getElementById('readerPage').style.display = 'block';
-    updateContent();
+    const welcomePage = document.getElementById('welcomePage');
+    const readerPage = document.getElementById('readerPage');
+    if (welcomePage && readerPage) {
+        welcomePage.style.display = 'none';
+        readerPage.style.display = 'block';
+        updateContent();
+    }
 }
 
 function startReading() {
     const select = document.getElementById('bookSelectWelcome');
-    if (select.value) {
+    if (select && select.value) {
         currentBook = select.value;
         document.getElementById('bookSelect').value = currentBook;
         showReader();
@@ -90,14 +99,10 @@ function startReading() {
     }
 }
 
-function backToWelcome() {
-    showWelcome();
-    saveSettings();
-}
-
 async function updateContent() {
     const content = document.getElementById('bookContent');
     const chapterSelect = document.getElementById('chapterSelect');
+    if (!content || !chapterSelect) return;
     if (!currentBook) {
         content.textContent = '';
         chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
@@ -121,6 +126,7 @@ async function updateContent() {
 
 function updateChapters() {
     const chapterSelect = document.getElementById('chapterSelect');
+    if (!chapterSelect) return;
     chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
     const text = books[currentBook];
     if (!text) return;
@@ -142,8 +148,10 @@ function updateChapters() {
 }
 
 document.getElementById('bookSelect')?.addEventListener('change', function() {
-    currentBook = this.value;
-    showReader();
+    if (this.value) {
+        currentBook = this.value;
+        showReader();
+    }
 });
 
 document.getElementById('themeSelect')?.addEventListener('change', function() {
@@ -181,6 +189,7 @@ function showBookmarks() {
 
 function updateBookmarks() {
     const list = document.getElementById('bookmarksList');
+    if (!list) return;
     list.innerHTML = '';
     bookmarks.forEach((bm, index) => {
         if (bm.book === currentBook) {
