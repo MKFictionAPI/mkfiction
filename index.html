@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MKFiction Читалка</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🖤 MKFiction</h1>
+        <div class="controls">
+            <select id="bookSelect">
+                <option value="book1">Тайник</option>
+                <option value="book2">Дорога к Тайнику ч.1</option>
+            </select>
+            <select id="themeSelect">
+                <option value="light">☀️ Светлая</option>
+                <option value="dark">🖤 Тёмная</option>
+            </select>
+        </div>
+        <div id="bookContent"></div>
+        <div class="buttons">
+            <button onclick="prevPage()">⬅ Назад</button>
+            <button onclick="nextPage()">Дальше ➡</button>
+            <button onclick="addBookmark()">📍 Закладка</button>
+            <button onclick="showBookmarks()">🔖 Закладки</button>
+        </div>
+        <div id="bookmarksList"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
