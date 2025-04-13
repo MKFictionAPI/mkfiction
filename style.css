@@ -57,6 +57,13 @@ select, button {
     border-radius: 50%;
     width: 150px;
     height: 150px;
+    border: 3px solid #444;
+}
+@media (max-width: 600px) {
+    .author-photo {
+        width: 120px;
+        height: 120px;
+    }
 }
 p {
     text-align: center;
