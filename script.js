@@ -77,6 +77,9 @@ function showWelcome() {
         currentBook = '';
         const content = document.getElementById('bookContent');
         if (content) content.textContent = '';
+        const bookSelect = document.getElementById('bookSelectWelcome');
+        if (bookSelect) bookSelect.value = '';
+        localStorage.removeItem(`mkfiction_${WebApp.initDataUnsafe.user?.id || 'guest'}`);
     } else {
         console.error('Welcome or reader page not found');
     }
@@ -92,6 +95,10 @@ function showReader() {
     } else {
         console.error('Welcome or reader page not found');
     }
+}
+
+function backToWelcome() {
+    showWelcome();
 }
 
 function startReading() {
