@@ -109,6 +109,7 @@ function updateContent() {
     const text = books[currentBook];
     const chunk = getTextChunk(text, currentPosition);
     content.textContent = chunk;
+    content.classList.add('visible');
     saveSettings();
 }
 document.getElementById('bookSelect')?.addEventListener('change', function() {
@@ -124,17 +125,31 @@ function setTheme(theme) {
     document.body.className = theme;
 }
 function prevPage() {
-    currentPosition = Math.max(0, currentPosition - chunkSize);
-    updateContent();
+    const content = document.getElementById('bookContent');
+    content.classList.add('slide-right');
+    setTimeout(() => {
+        currentPosition = Math.max(0, currentPosition - chunkSize);
+        updateContent();
+        content.classList.remove('slide-right');
+        content.classList.add('visible');
+    }, 500);
 }
 function nextPage() {
-    const text = books[currentBook];
-    if (currentPosition + chunkSize < text.length) {
-        currentPosition += chunkSize;
-        updateContent();
-    } else {
-        WebApp.showAlert('Книга закончилась... или это лишь начало теней?');
-    }
+    const content = document.getElementById('bookContent');
+    content.classList.add('slide-left');
+    setTimeout(() => {
+        const text = books[currentBook];
+        if (currentPosition + chunkSize < text.length) {
+            currentPosition += chunkSize;
+            updateContent();
+            content.classList.remove('slide-left');
+            content.classList.add('visible');
+        } else {
+            WebApp.showAlert('Книга закончилась... или это лишь начало теней?');
+            content.classList.remove('slide-left');
+            content.classList.add('visible');
+        }
+    }, 500);
 }
 function addBookmark() {
     if (!currentBook) return;
