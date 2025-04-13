@@ -146,13 +146,13 @@ function updateChapters() {
     chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
     const text = books[currentBook];
     if (!text) return;
-    const chapterRegex = /^Глава \d+\.\s*[^\n]+/gm;
+    const chapterRegex = /^# Глава \d+\.\s*[^\n]+/gm;
     let match;
     let index = 0;
     while ((match = chapterRegex.exec(text)) !== null) {
         const option = document.createElement('option');
         option.value = match.index;
-        option.textContent = match[0].replace(/^Глава \d+\.\s*/, 'Глава ' + (++index) + ': ');
+        option.textContent = match[0].replace(/^# Глава \d+\.\s*/, 'Глава ' + (++index) + ': ');
         chapterSelect.appendChild(option);
     }
     chapterSelect.addEventListener('change', () => {
