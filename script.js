@@ -21,27 +21,30 @@ const books = {
     book20: null
 };
 let currentBook = '';
-let chunkSize = 500;
-let currentPosition = 0;
 let bookmarks = [];
 const WebApp = window.Telegram.WebApp;
 WebApp.ready();
 WebApp.expand();
+
 function syncTheme() {
     const telegramTheme = WebApp.themeParams.bg_color?.toLowerCase() === '#212121' ? 'dark' : 'light';
     setTheme(telegramTheme);
-    document.getElementById('themeSelect').value = telegramTheme;
+    document.getElementById('themeSelect')?.value = telegramTheme;
 }
+
 function loadSettings() {
     const saved = localStorage.getItem(`mkfiction_${WebApp.initDataUnsafe.user?.id || 'guest'}`);
     if (saved) {
         const settings = JSON.parse(saved);
         currentBook = settings.book || '';
-        currentPosition = settings.position || 0;
         bookmarks = settings.bookmarks || [];
-        if (currentBook) {
+        if (currentBook && books[currentBook] !== undefined) {
             document.getElementById('bookSelect').value = currentBook;
             showReader();
+            updateContent().then(() => {
+                const scrollPos = settings.scrollPos || 0;
+                document.getElementById('bookContent').scrollTop = scrollPos;
+            });
         } else {
             showWelcome();
         }
@@ -49,33 +52,36 @@ function loadSettings() {
         showWelcome();
     }
     syncTheme();
-    updateContent();
-    updateBookmarks();
 }
+
 function saveSettings() {
+    const content = document.getElementById('bookContent');
+    const scrollPos = content.scrollTop;
     localStorage.setItem(`mkfiction_${WebApp.initDataUnsafe.user?.id || 'guest'}`, JSON.stringify({
         book: currentBook,
-        position: currentPosition,
+        scrollPos: scrollPos,
         bookmarks: bookmarks,
         theme: document.getElementById('themeSelect')?.value || 'light'
     }));
 }
+
 function showWelcome() {
     document.getElementById('welcomePage').style.display = 'block';
     document.getElementById('readerPage').style.display = 'none';
     currentBook = '';
-    updateContent();
+    document.getElementById('bookContent').textContent = '';
 }
+
 function showReader() {
     document.getElementById('welcomePage').style.display = 'none';
     document.getElementById('readerPage').style.display = 'block';
     updateContent();
 }
+
 function startReading() {
     const select = document.getElementById('bookSelectWelcome');
     if (select.value) {
         currentBook = select.value;
-        currentPosition = 0;
         document.getElementById('bookSelect').value = currentBook;
         showReader();
         saveSettings();
@@ -83,27 +89,18 @@ function startReading() {
         WebApp.showAlert('Выбери книгу, чтобы начать!');
     }
 }
+
 function backToWelcome() {
     showWelcome();
     saveSettings();
 }
-function getTextChunk(text, position) {
-    if (!text || position >= text.length) {
-        return '';
-    }
-    const end = Math.min(position + chunkSize, text.length);
-    let chunk = text.slice(position, end);
-    if (end < text.length) {
-        while (chunk.length > 0 && !/\s/.test(chunk[chunk.length - 1])) {
-            chunk = chunk.slice(0, -1);
-        }
-    }
-    return chunk;
-}
+
 async function updateContent() {
     const content = document.getElementById('bookContent');
+    const chapterSelect = document.getElementById('chapterSelect');
     if (!currentBook) {
         content.textContent = '';
+        chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
         return;
     }
     if (books[currentBook] === null) {
@@ -113,73 +110,75 @@ async function updateContent() {
             books[currentBook] = await response.text();
         } catch (error) {
             content.textContent = 'Ошибка загрузки текста...';
+            chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
             return;
         }
     }
-    const text = books[currentBook];
-    const chunk = getTextChunk(text, currentPosition);
-    content.textContent = chunk;
-    content.classList.add('visible');
-    saveSettings();
+    content.textContent = books[currentBook];
+    updateChapters();
+    content.addEventListener('scroll', saveSettings);
 }
+
+function updateChapters() {
+    const chapterSelect = document.getElementById('chapterSelect');
+    chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
+    const text = books[currentBook];
+    if (!text) return;
+    const chapterRegex = /^Глава \d+\.\s*[^\n]+/gm;
+    let match;
+    let index = 0;
+    while ((match = chapterRegex.exec(text)) !== null) {
+        const option = document.createElement('option');
+        option.value = match.index;
+        option.textContent = match[0].replace(/^Глава \d+\.\s*/, 'Глава ' + (++index) + ': ');
+        chapterSelect.appendChild(option);
+    }
+    chapterSelect.addEventListener('change', () => {
+        if (chapterSelect.value) {
+            document.getElementById('bookContent').scrollTop = parseInt(chapterSelect.value);
+            saveSettings();
+        }
+    });
+}
+
 document.getElementById('bookSelect')?.addEventListener('change', function() {
     currentBook = this.value;
-    currentPosition = 0;
-    updateContent();
+    showReader();
 });
+
 document.getElementById('themeSelect')?.addEventListener('change', function() {
     setTheme(this.value);
     saveSettings();
 });
+
 function setTheme(theme) {
     document.body.className = theme;
 }
-function prevPage() {
-    const content = document.getElementById('bookContent');
-    content.classList.add('slide-right');
-    setTimeout(() => {
-        currentPosition = Math.max(0, currentPosition - chunkSize);
-        updateContent();
-        content.classList.remove('slide-right');
-        content.classList.add('visible');
-    }, 500);
-}
-function nextPage() {
-    const content = document.getElementById('bookContent');
-    content.classList.add('slide-left');
-    setTimeout(() => {
-        const text = books[currentBook];
-        if (currentPosition + chunkSize < text.length) {
-            currentPosition += chunkSize;
-            updateContent();
-            content.classList.remove('slide-left');
-            content.classList.add('visible');
-        } else {
-            WebApp.showAlert('Книга закончилась... или это лишь начало теней?');
-            content.classList.remove('slide-left');
-            content.classList.add('visible');
-        }
-    }, 500);
-}
+
 function addBookmark() {
     if (!currentBook) return;
-    const name = prompt('Назови закладку:', `Закладка ${currentPosition}`);
+    const content = document.getElementById('bookContent');
+    const scrollPos = content.scrollTop;
+    const name = prompt('Назови закладку:', `Закладка ${scrollPos}`);
     if (name) {
-        bookmarks.push({ book: currentBook, position: currentPosition, name });
+        bookmarks.push({ book: currentBook, scrollPos, name });
         updateBookmarks();
         saveSettings();
-        WebApp.showAlert(`Закладка "${name}" сохранена на позиции ${currentPosition}!`);
+        WebApp.showAlert(`Закладка "${name}" сохранена!`);
     }
 }
+
 function deleteBookmark(index) {
     bookmarks.splice(index, 1);
     updateBookmarks();
     saveSettings();
     WebApp.showAlert('Закладка удалена!');
 }
+
 function showBookmarks() {
     updateBookmarks();
 }
+
 function updateBookmarks() {
     const list = document.getElementById('bookmarksList');
     list.innerHTML = '';
@@ -188,10 +187,10 @@ function updateBookmarks() {
             const div = document.createElement('div');
             div.className = 'bookmark';
             const text = document.createElement('span');
-            text.textContent = `📖 ${bm.name} (поз. ${bm.position})`;
+            text.textContent = `📖 ${bm.name}`;
             text.onclick = () => {
-                currentPosition = bm.position;
-                updateContent();
+                document.getElementById('bookContent').scrollTop = bm.scrollPos;
+                saveSettings();
             };
             const deleteBtn = document.createElement('span');
             deleteBtn.textContent = '🗑️';
@@ -203,9 +202,10 @@ function updateBookmarks() {
         }
     });
 }
+
 const urlParams = new URLSearchParams(window.location.search);
 const bookFromUrl = urlParams.get('book');
-if (bookFromUrl && books[bookFromUrl]) {
+if (bookFromUrl && books[bookFromUrl] !== undefined) {
     currentBook = bookFromUrl;
     document.getElementById('bookSelect').value = currentBook;
     showReader();
