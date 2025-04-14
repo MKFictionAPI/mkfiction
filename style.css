@@ -38,10 +38,17 @@ select, button {
     border: 1px solid #ccc;
     transition: background 0.2s;
 }
-#bookSelectWelcome {
+select:invalid {
+    color: #888;
+}
+select option:disabled {
+    color: #888;
+}
+#bookSelectWelcome, #bookSelect, #chapterSelect {
     margin-bottom: 10px;
     max-height: 150px;
     overflow-y: auto;
+    color: #333;
 }
 #bookContent {
     border: 1px solid;
@@ -52,10 +59,11 @@ select, button {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    max-height: 60vh;
+    max-height: 65vh;
     line-height: 1.5;
     scroll-behavior: smooth;
     min-height: 100px;
+    margin-bottom: 10px;
 }
 #bookContent span[id^="line-"] {
     display: block;
@@ -66,20 +74,19 @@ select, button {
     background: rgba(0, 0, 0, 0.05);
 }
 .reader-controls {
-    position: relative;
-    margin-top: 10px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 200;
 }
 .menu-toggle {
-    padding: 8px;
-    font-size: 14px;
+    padding: 8px 12px;
+    font-size: 18px;
     cursor: pointer;
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
     border: 1px solid #ccc;
-    text-align: left;
-    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     transition: background 0.2s;
 }
 .menu-toggle:hover {
@@ -89,13 +96,13 @@ select, button {
     position: fixed;
     top: 0;
     left: -250px;
-    width: 250px;
+    width: 200px;
     height: 100%;
     background: rgba(255, 255, 255, 0.95);
     border-right: 1px solid #ccc;
     padding: 20px 10px;
     box-sizing: border-box;
-    z-index: 90;
+    z-index: 190;
     transition: transform 0.3s ease-in-out;
     pointer-events: auto;
     display: flex;
@@ -107,11 +114,12 @@ select, button {
 }
 .nav-menu select, .nav-menu button {
     pointer-events: auto;
-    z-index: 95;
+    z-index: 195;
 }
 .chapters-controls {
+    margin: 10px 0;
     position: relative;
-    margin-bottom: 10px;
+    z-index: 180;
 }
 .chapters-toggle {
     padding: 8px;
@@ -119,11 +127,9 @@ select, button {
     cursor: pointer;
     border-radius: 5px;
     width: 100%;
-    box-sizing: border-box;
     background: rgba(255, 255, 255, 0.8);
     border: 1px solid #ccc;
     text-align: left;
-    z-index: 100;
     transition: background 0.2s;
 }
 .chapters-toggle:hover {
@@ -132,14 +138,14 @@ select, button {
 .chapters-menu {
     display: none;
     position: absolute;
-    top: 40px;
+    top: 100%;
     left: 0;
     right: 0;
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
-    z-index: 90;
+    z-index: 170;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     pointer-events: auto;
     opacity: 0;
@@ -151,7 +157,7 @@ select, button {
 }
 .chapters-menu select {
     pointer-events: auto;
-    z-index: 95;
+    z-index: 175;
 }
 .font-size-controls {
     display: flex;
@@ -161,13 +167,13 @@ select, button {
 .font-size-controls button {
     width: 40px;
     padding: 5px;
-    z-index: 95;
+    z-index: 195;
 }
 .font-size-controls span {
     font-size: 14px;
     min-width: 50px;
     text-align: center;
-    z-index: 95;
+    z-index: 195;
 }
 #bookmarksList {
     margin-top: 10px;
@@ -258,6 +264,13 @@ body.dark .menu-toggle, body.dark .chapters-toggle {
     .menu-toggle {
         display: none;
     }
+    .reader-controls {
+        position: static;
+        margin-bottom: 10px;
+    }
+    #bookContent {
+        max-height: 70vh;
+    }
 }
 @media (max-width: 600px) {
     body {
@@ -277,24 +290,24 @@ body.dark .menu-toggle, body.dark .chapters-toggle {
     select, button {
         font-size: 11px;
         padding: 5px;
-        width: 100%;
     }
     .controls {
         flex-direction: column;
         gap: 5px;
     }
     .reader-controls {
-        gap: 5px;
+        top: 5px;
+        right: 5px;
     }
     #bookContent {
         padding: 10px;
         font-size: 14px;
-        max-height: 50vh;
+        max-height: 75vh;
     }
-    #bookSelectWelcome, #chapterSelect {
+    #bookSelectWelcome, #bookSelect, #chapterSelect {
         max-height: 120px;
     }
     .chapters-menu {
-        top: 35px;
+        top: 100%;
     }
 }
