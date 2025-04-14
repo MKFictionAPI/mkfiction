@@ -139,7 +139,18 @@ async function updateContent() {
             return;
         }
     }
-    content.textContent = books[currentBook];
+    // Очищаем старые span
+    content.innerHTML = '';
+    // Разбиваем текст на строки
+    const lines = books[currentBook].split('\n');
+    lines.forEach((line, index) => {
+        const span = document.createElement('span');
+        span.textContent = line;
+        span.id = `line-${index}`;
+        span.style.display = 'block'; // Каждая строка как блок
+        content.appendChild(span);
+        content.appendChild(document.createTextNode('\n')); // Добавляем перенос
+    });
     updateChapters();
     content.addEventListener('scroll', saveSettings, { once: true });
 }
@@ -157,29 +168,26 @@ function updateChapters() {
         console.error('No text for current book');
         return;
     }
-    // Разбиваем текст на строки для точного позиционирования
-    const lines = text.split('\n');
     const chapterRegex = /^#\s*Глава\s*\d+\.\s*[^\n]+/gm;
     let match;
     let index = 0;
-    let lineIndex = 0;
-    const chapterPositions = [];
+    const lines = text.split('\n');
     while ((match = chapterRegex.exec(text)) !== null) {
         console.log('Found chapter:', match[0], 'at index:', match.index);
-        // Находим номер строки для этой главы
+        // Находим номер строки
         let charCount = 0;
-        for (let i = 0; i < lines.length; i++) {
+        let lineIndex = 0;
+        for (let i = 0; i < lines.length; i) {
             if (charCount + lines[i].length >= match.index) {
                 lineIndex = i;
                 break;
             }
-            charCount += lines[i].length + 1; // +1 для \n
+            charCount += lines[i].length + 1;
         }
         const option = document.createElement('option');
-        option.value = lineIndex; // Сохраняем номер строки
+        option.value = lineIndex;
         option.textContent = match[0].replace(/^#\s*Глава\s*\d+\.\s*/, 'Глава ' + (++index) + ': ');
         chapterSelect.appendChild(option);
-        chapterPositions.push({ line: lineIndex, title: match[0] });
     }
     if (index === 0) {
         console.warn('No chapters found in text');
@@ -188,24 +196,17 @@ function updateChapters() {
         if (chapterSelect.value) {
             const lineNum = parseInt(chapterSelect.value);
             console.log('Scrolling to line:', lineNum);
-            // Создаём временный элемент для точной прокрутки
-            const tempId = `chapter-${lineNum}`;
-            let target = document.getElementById(tempId);
-            if (!target) {
-                const lines = content.textContent.split('\n');
-                if (lineNum < lines.length) {
-                    const textNode = document.createTextNode(lines[lineNum]);
-                    target = document.createElement('span');
-                    target.id = tempId;
-                    content.insertBefore(target, content.firstChild);
-                    content.innerHTML = content.textContent.replace(lines[lineNum], `<span id="${tempId}">${lines[lineNum]}</span>`);
-                }
-            }
+            const target = document.getElementById(`line-${lineNum}`);
+            // Очищаем предыдущие выделения
+            const spans = content.querySelectorAll('span[id^="line-"]');
+            spans.forEach(span => span.style.fontWeight = 'normal');
             if (target) {
+                target.style.fontWeight = 'bold'; // Выделяем текущую главу
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                console.log('Scrolled to:', target.textContent);
             } else {
-                console.warn('Target chapter not found in DOM');
-                content.scrollTo({ top: lineNum * 20, behavior: 'smooth' }); // Запасной вариант
+                console.warn('Target line not found:', `line-${lineNum}`);
+                content.scrollTo({ top: lineNum * 20, behavior: 'smooth' });
             }
             saveSettings();
         }
