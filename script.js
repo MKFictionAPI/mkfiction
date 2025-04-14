@@ -111,6 +111,7 @@ function showReader() {
 
 function backToWelcome() {
     showWelcome();
+    closeMenu();
 }
 
 function startReading() {
@@ -222,6 +223,7 @@ function updateChapters() {
                 content.scrollTo({ top: lineNum * 20, behavior: 'smooth' });
             }
             saveSettings();
+            closeMenu();
         }
     });
 }
@@ -235,6 +237,7 @@ function changeFontSize(delta) {
     content.style.fontSize = `${currentSize}px`;
     fontSizeDisplay.textContent = `${currentSize}px`;
     saveSettings();
+    closeMenu();
 }
 
 const bookSelect = document.getElementById('bookSelect');
@@ -253,6 +256,7 @@ if (themeSelect) {
     themeSelect.addEventListener('change', function() {
         setTheme(this.value);
         saveSettings();
+        closeMenu();
     });
 }
 
@@ -263,6 +267,7 @@ if (fontSelect) {
         if (content) {
             content.style.fontFamily = this.value;
             saveSettings();
+            closeMenu();
         }
     });
 }
@@ -278,6 +283,14 @@ function toggleMenu() {
     }
 }
 
+function closeMenu() {
+    const navMenu = document.getElementById('navMenu');
+    if (navMenu && navMenu.classList.contains('active')) {
+        navMenu.classList.remove('active');
+        console.log('Menu closed');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.getElementById('menuToggle');
     if (menuToggle) {
@@ -286,6 +299,14 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('menuToggle not found');
     }
+    // Привязываем события для кнопок изменения размера шрифта
+    const fontSizeButtons = document.querySelectorAll('.font-size-controls button');
+    fontSizeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const delta = button.textContent === '+' ? 2 : -2;
+            changeFontSize(delta);
+        });
+    });
 });
 
 function setTheme(theme) {
@@ -303,6 +324,7 @@ function addBookmark() {
         updateBookmarks();
         saveSettings();
         WebApp.showAlert(`Закладка "${name}" сохранена!`);
+        closeMenu();
     }
 }
 
@@ -315,6 +337,7 @@ function deleteBookmark(index) {
 
 function showBookmarks() {
     updateBookmarks();
+    closeMenu();
 }
 
 function updateBookmarks() {
