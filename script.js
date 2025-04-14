@@ -51,7 +51,6 @@ function loadSettings() {
         } else {
             showWelcome();
         }
-        // Загружаем шрифт и размер
         const fontSelect = document.getElementById('fontSelect');
         if (fontSelect && settings.font) fontSelect.value = settings.font;
         const content = document.getElementById('bookContent');
@@ -152,9 +151,7 @@ async function updateContent() {
             return;
         }
     }
-    // Очищаем содержимое
     content.innerHTML = '';
-    // Разбиваем текст на строки
     const lines = books[currentBook].split('\n');
     lines.forEach((line, index) => {
         const span = document.createElement('span');
@@ -162,7 +159,6 @@ async function updateContent() {
         span.id = `line-${index}`;
         span.style.display = 'block';
         content.appendChild(span);
-        // Добавляем перенос строки
         const br = document.createElement('br');
         content.appendChild(br);
     });
@@ -188,7 +184,6 @@ function updateChapters() {
     let match;
     let index = 0;
     while ((match = chapterRegex.exec(text)) !== null) {
-        // Находим номер строки
         let charCount = 0;
         let lineIndex = 0;
         for (let i = 0; i < lines.length; i++) {
@@ -196,7 +191,7 @@ function updateChapters() {
                 lineIndex = i;
                 break;
             }
-            charCount += lines[i].length + 1; // +1 для \n
+            charCount += lines[i].length + 1;
         }
         console.log('Found chapter:', match[0], 'at line:', lineIndex);
         const option = document.createElement('option');
@@ -212,7 +207,6 @@ function updateChapters() {
             const lineNum = parseInt(chapterSelect.value);
             console.log('Attempting to scroll to line:', lineNum);
             const target = document.getElementById(`line-${lineNum}`);
-            // Очищаем предыдущие выделения
             const spans = content.querySelectorAll('span[id^="line-"]');
             spans.forEach(span => {
                 span.style.fontWeight = 'normal';
@@ -273,13 +267,26 @@ if (fontSelect) {
     });
 }
 
-const menuToggle = document.getElementById('menuToggle');
-const navMenu = document.getElementById('navMenu');
-if (menuToggle && navMenu) {
-    menuToggle.addEventListener('click', () => {
+function toggleMenu() {
+    const navMenu = document.getElementById('navMenu');
+    console.log('Menu toggle clicked');
+    if (navMenu) {
         navMenu.classList.toggle('active');
-    });
+        console.log('Menu state:', navMenu.classList.contains('active') ? 'open' : 'closed');
+    } else {
+        console.error('navMenu not found');
+    }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menuToggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', toggleMenu);
+        console.log('Menu toggle initialized');
+    } else {
+        console.error('menuToggle not found');
+    }
+});
 
 function setTheme(theme) {
     document.body.className = theme;
