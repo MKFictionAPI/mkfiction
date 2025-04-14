@@ -137,7 +137,7 @@ async function updateContent() {
     }
     if (!currentBook) {
         content.textContent = '';
-        chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
+        chapterSelect.innerHTML = '<option value="" disabled selected>-- Выбери главу --</option>';
         return;
     }
     if (books[currentBook] === null) {
@@ -147,7 +147,7 @@ async function updateContent() {
             books[currentBook] = await response.text();
         } catch (error) {
             content.textContent = 'Ошибка загрузки текста...';
-            chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
+            chapterSelect.innerHTML = '<option value="" disabled selected>-- Выбери главу --</option>';
             console.error('Error loading book:', error);
             return;
         }
@@ -174,7 +174,7 @@ function updateChapters() {
         console.error('Chapter select or content not found');
         return;
     }
-    chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
+    chapterSelect.innerHTML = '<option value="" disabled selected>-- Выбери главу --</option>';
     const text = books[currentBook];
     if (!text) {
         console.error('No text for current book');
@@ -208,22 +208,25 @@ function updateChapters() {
             const lineNum = parseInt(chapterSelect.value);
             console.log('Attempting to scroll to line:', lineNum);
             const target = document.getElementById(`line-${lineNum}`);
+            const content = document.getElementById('bookContent');
             const spans = content.querySelectorAll('span[id^="line-"]');
             spans.forEach(span => {
                 span.style.fontWeight = 'normal';
                 span.style.background = 'none';
             });
-            if (target) {
+            if (target && content) {
                 target.style.fontWeight = 'bold';
                 target.style.background = 'rgba(0, 0, 0, 0.05)';
-                const content = document.getElementById('bookContent');
-                const fontSize = parseFloat(getComputedStyle(content).fontSize);
-                const lineHeight = parseFloat(getComputedStyle(content).lineHeight) || fontSize * 1.5;
-                const targetTop = target.offsetTop;
+                const rect = target.getBoundingClientRect();
+                const contentRect = content.getBoundingClientRect();
+                const scrollTop = content.scrollTop;
+                const targetTop = rect.top - contentRect.top + scrollTop;
                 content.scrollTo({ top: targetTop, behavior: 'smooth' });
                 console.log('Scrolled to:', target.textContent, 'at offset:', targetTop);
             } else {
                 console.warn('Target line not found:', `line-${lineNum}`);
+                const fontSize = parseFloat(getComputedStyle(content).fontSize);
+                const lineHeight = parseFloat(getComputedStyle(content).lineHeight) || fontSize * 1.5;
                 content.scrollTo({ top: lineNum * lineHeight, behavior: 'smooth' });
             }
             saveSettings();
@@ -246,6 +249,26 @@ function changeFontSize(delta) {
 
 const bookSelect = document.getElementById('bookSelect');
 if (bookSelect) {
+    bookSelect.addEventListener('change', function() {
+        if (this.value) {
+            currentBook = this.value;
+            showReader();
+            saveSettings();
+        }
+    });
+}
+
+const themeSelect = document.getElementById('themeSelect');
+if (themeSelect) {
+    themeSelect.addEventListener('change', function() {
+        setTheme(this.value);
+        saveSettings();
+        closeMenu();
+    });
+}
+
+const fontSelect = document.getElementById('fontSelect');
+if (fontSelect) {
     bookSelect.addEventListener('change', function() {
         if (this.value) {
             currentBook = this.value;
