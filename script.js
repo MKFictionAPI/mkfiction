@@ -51,6 +51,15 @@ function loadSettings() {
         } else {
             showWelcome();
         }
+        // Загружаем шрифт и размер
+        const fontSelect = document.getElementById('fontSelect');
+        if (fontSelect && settings.font) fontSelect.value = settings.font;
+        const content = document.getElementById('bookContent');
+        if (content && settings.fontSize) {
+            content.style.fontSize = `${settings.fontSize}px`;
+            const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+            if (fontSizeDisplay) fontSizeDisplay.textContent = `${settings.fontSize}px`;
+        }
     } else {
         showWelcome();
     }
@@ -60,11 +69,15 @@ function loadSettings() {
 function saveSettings() {
     const content = document.getElementById('bookContent');
     const scrollPos = content ? content.scrollTop : 0;
+    const font = document.getElementById('fontSelect')?.value || 'Georgia';
+    const fontSize = parseInt(content?.style.fontSize || '16');
     localStorage.setItem(`mkfiction_${WebApp.initDataUnsafe.user?.id || 'guest'}`, JSON.stringify({
         book: currentBook,
         scrollPos: scrollPos,
         bookmarks: bookmarks,
-        theme: document.getElementById('themeSelect')?.value || 'light'
+        theme: document.getElementById('themeSelect')?.value || 'light',
+        font: font,
+        fontSize: fontSize
     }));
 }
 
@@ -219,6 +232,17 @@ function updateChapters() {
     });
 }
 
+function changeFontSize(delta) {
+    const content = document.getElementById('bookContent');
+    const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+    if (!content || !fontSizeDisplay) return;
+    let currentSize = parseInt(content.style.fontSize || '16');
+    currentSize = Math.max(12, Math.min(24, currentSize + delta));
+    content.style.fontSize = `${currentSize}px`;
+    fontSizeDisplay.textContent = `${currentSize}px`;
+    saveSettings();
+}
+
 const bookSelect = document.getElementById('bookSelect');
 if (bookSelect) {
     bookSelect.addEventListener('change', function() {
@@ -235,6 +259,25 @@ if (themeSelect) {
     themeSelect.addEventListener('change', function() {
         setTheme(this.value);
         saveSettings();
+    });
+}
+
+const fontSelect = document.getElementById('fontSelect');
+if (fontSelect) {
+    fontSelect.addEventListener('change', function() {
+        const content = document.getElementById('bookContent');
+        if (content) {
+            content.style.fontFamily = this.value;
+            saveSettings();
+        }
+    });
+}
+
+const menuToggle = document.getElementById('menuToggle');
+const navMenu = document.getElementById('navMenu');
+if (menuToggle && navMenu) {
+    menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
     });
 }
 
