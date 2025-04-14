@@ -71,13 +71,33 @@
             </div>
             <div id="bookContent"></div>
             <div class="reader-controls">
-                <select id="chapterSelect">
-                    <option value="">-- Выбери главу --</option>
-                </select>
-                <button onclick="addBookmark()">📍 Добавить закладку</button>
-                <button onclick="showBookmarks()">🔖 Показать закладки</button>
-                <button onclick="backToWelcome()">🏠 На главную</button>
-            </div>
+    <button id="menuToggle" class="menu-toggle">☰ Меню</button>
+    <div id="navMenu" class="nav-menu" style="display: none;">
+        <select id="fontSelect">
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Arial">Arial</option>
+            <option value="Roboto">Roboto</option>
+            <option value="PT Serif">PT Serif</option>
+            <option value="Open Sans">Open Sans</option>
+        </select>
+        <div class="font-size-controls">
+            <button onclick="changeFontSize(-2)">–</button>
+            <span id="fontSizeDisplay">16px</span>
+            <button onclick="changeFontSize(2)">+</button>
+        </div>
+        <select id="chapterSelect">
+            <option value="">-- Выбери главу --</option>
+        </select>
+        <select id="themeSelect">
+            <option value="light">Светлая</option>
+            <option value="dark">Тёмная</option>
+        </select>
+        <button onclick="addBookmark()">Добавить закладку</button>
+        <button onclick="showBookmarks()">Закладки</button>
+        <button onclick="backToWelcome()">На главную</button>
+    </div>
+</div>
             <div id="bookmarksList"></div>
         </div>
     </div>
