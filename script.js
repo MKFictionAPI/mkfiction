@@ -146,8 +146,9 @@ async function updateContent() {
 
 function updateChapters() {
     const chapterSelect = document.getElementById('chapterSelect');
-    if (!chapterSelect) {
-        console.error('Chapter select not found');
+    const content = document.getElementById('bookContent');
+    if (!chapterSelect || !content) {
+        console.error('Chapter select or content not found');
         return;
     }
     chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
@@ -156,28 +157,57 @@ function updateChapters() {
         console.error('No text for current book');
         return;
     }
+    // Разбиваем текст на строки для точного позиционирования
+    const lines = text.split('\n');
     const chapterRegex = /^#\s*Глава\s*\d+\.\s*[^\n]+/gm;
     let match;
     let index = 0;
-    console.log('Parsing chapters for:', currentBook);
+    let lineIndex = 0;
+    const chapterPositions = [];
     while ((match = chapterRegex.exec(text)) !== null) {
-        console.log('Found chapter:', match[0]);
+        console.log('Found chapter:', match[0], 'at index:', match.index);
+        // Находим номер строки для этой главы
+        let charCount = 0;
+        for (let i = 0; i < lines.length; i++) {
+            if (charCount + lines[i].length >= match.index) {
+                lineIndex = i;
+                break;
+            }
+            charCount += lines[i].length + 1; // +1 для \n
+        }
         const option = document.createElement('option');
-        option.value = match.index;
+        option.value = lineIndex; // Сохраняем номер строки
         option.textContent = match[0].replace(/^#\s*Глава\s*\d+\.\s*/, 'Глава ' + (++index) + ': ');
         chapterSelect.appendChild(option);
+        chapterPositions.push({ line: lineIndex, title: match[0] });
     }
     if (index === 0) {
         console.warn('No chapters found in text');
     }
     chapterSelect.addEventListener('change', () => {
         if (chapterSelect.value) {
-            const content = document.getElementById('bookContent');
-            if (content) {
-                console.log('Scrolling to:', chapterSelect.value);
-                content.scrollTop = parseInt(chapterSelect.value);
-                saveSettings();
+            const lineNum = parseInt(chapterSelect.value);
+            console.log('Scrolling to line:', lineNum);
+            // Создаём временный элемент для точной прокрутки
+            const tempId = `chapter-${lineNum}`;
+            let target = document.getElementById(tempId);
+            if (!target) {
+                const lines = content.textContent.split('\n');
+                if (lineNum < lines.length) {
+                    const textNode = document.createTextNode(lines[lineNum]);
+                    target = document.createElement('span');
+                    target.id = tempId;
+                    content.insertBefore(target, content.firstChild);
+                    content.innerHTML = content.textContent.replace(lines[lineNum], `<span id="${tempId}">${lines[lineNum]}</span>`);
+                }
             }
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                console.warn('Target chapter not found in DOM');
+                content.scrollTo({ top: lineNum * 20, behavior: 'smooth' }); // Запасной вариант
+            }
+            saveSettings();
         }
     });
 }
