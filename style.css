@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=PT+Serif&family=Open+Sans&display=swap');
+
 body {
     font-family: 'Georgia', serif;
     margin: 0;
@@ -63,10 +65,51 @@ select, button {
     background: rgba(0, 0, 0, 0.05);
 }
 .reader-controls {
-    display: flex;
+    position: relative;
+    margin-top: 10px;
+}
+.menu-toggle {
+    padding: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+    text-align: left;
+}
+.nav-menu {
+    display: none;
     flex-direction: column;
     gap: 5px;
-    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+.nav-menu.active {
+    display: flex;
+}
+.font-size-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.font-size-controls button {
+    width: 40px;
+    padding: 5px;
+}
+.font-size-controls span {
+    font-size: 14px;
+    min-width: 50px;
+    text-align: center;
 }
 #chapterSelect {
     padding: 8px;
@@ -137,6 +180,10 @@ body.dark select, body.dark button {
 body.dark .bookmark {
     background: rgba(0, 0, 0, 0.7);
 }
+body.dark .nav-menu {
+    background: rgba(0, 0, 0, 0.95);
+    border-color: #555;
+}
 @media (max-width: 600px) {
     body {
         padding: 5px;
@@ -171,5 +218,8 @@ body.dark .bookmark {
     }
     #bookSelectWelcome, #chapterSelect {
         max-height: 120px;
+    }
+    .nav-menu {
+        top: 35px;
     }
 }
