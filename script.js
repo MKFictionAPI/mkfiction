@@ -139,7 +139,7 @@ async function updateContent() {
             return;
         }
     }
-    // Очищаем старые span
+    // Очищаем содержимое
     content.innerHTML = '';
     // Разбиваем текст на строки
     const lines = books[currentBook].split('\n');
@@ -147,9 +147,11 @@ async function updateContent() {
         const span = document.createElement('span');
         span.textContent = line;
         span.id = `line-${index}`;
-        span.style.display = 'block'; // Каждая строка как блок
+        span.style.display = 'block';
         content.appendChild(span);
-        content.appendChild(document.createTextNode('\n')); // Добавляем перенос
+        // Добавляем перенос строки
+        const br = document.createElement('br');
+        content.appendChild(br);
     });
     updateChapters();
     content.addEventListener('scroll', saveSettings, { once: true });
@@ -169,21 +171,21 @@ function updateChapters() {
         return;
     }
     const chapterRegex = /^#\s*Глава\s*\d+\.\s*[^\n]+/gm;
+    const lines = text.split('\n');
     let match;
     let index = 0;
-    const lines = text.split('\n');
     while ((match = chapterRegex.exec(text)) !== null) {
-        console.log('Found chapter:', match[0], 'at index:', match.index);
         // Находим номер строки
         let charCount = 0;
         let lineIndex = 0;
-        for (let i = 0; i < lines.length; i) {
-            if (charCount + lines[i].length >= match.index) {
+        for (let i = 0; i < lines.length; i++) {
+            if (charCount >= match.index) {
                 lineIndex = i;
                 break;
             }
-            charCount += lines[i].length + 1;
+            charCount += lines[i].length + 1; // +1 для \n
         }
+        console.log('Found chapter:', match[0], 'at line:', lineIndex);
         const option = document.createElement('option');
         option.value = lineIndex;
         option.textContent = match[0].replace(/^#\s*Глава\s*\d+\.\s*/, 'Глава ' + (++index) + ': ');
@@ -195,13 +197,17 @@ function updateChapters() {
     chapterSelect.addEventListener('change', () => {
         if (chapterSelect.value) {
             const lineNum = parseInt(chapterSelect.value);
-            console.log('Scrolling to line:', lineNum);
+            console.log('Attempting to scroll to line:', lineNum);
             const target = document.getElementById(`line-${lineNum}`);
             // Очищаем предыдущие выделения
             const spans = content.querySelectorAll('span[id^="line-"]');
-            spans.forEach(span => span.style.fontWeight = 'normal');
+            spans.forEach(span => {
+                span.style.fontWeight = 'normal';
+                span.style.background = 'none';
+            });
             if (target) {
-                target.style.fontWeight = 'bold'; // Выделяем текущую главу
+                target.style.fontWeight = 'bold';
+                target.style.background = 'rgba(0, 0, 0, 0.05)';
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 console.log('Scrolled to:', target.textContent);
             } else {
