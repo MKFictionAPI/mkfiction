@@ -52,6 +52,7 @@ select, button {
     max-height: 60vh;
     line-height: 1.5;
     scroll-behavior: smooth;
+    min-height: 100px;
 }
 #bookContent span[id^="line-"] {
     display: block;
