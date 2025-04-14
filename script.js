@@ -216,14 +216,18 @@ function updateChapters() {
             if (target) {
                 target.style.fontWeight = 'bold';
                 target.style.background = 'rgba(0, 0, 0, 0.05)';
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                console.log('Scrolled to:', target.textContent);
+                const content = document.getElementById('bookContent');
+                const fontSize = parseFloat(getComputedStyle(content).fontSize);
+                const lineHeight = parseFloat(getComputedStyle(content).lineHeight) || fontSize * 1.5;
+                const targetTop = target.offsetTop;
+                content.scrollTo({ top: targetTop, behavior: 'smooth' });
+                console.log('Scrolled to:', target.textContent, 'at offset:', targetTop);
             } else {
                 console.warn('Target line not found:', `line-${lineNum}`);
-                content.scrollTo({ top: lineNum * 20, behavior: 'smooth' });
+                content.scrollTo({ top: lineNum * lineHeight, behavior: 'smooth' });
             }
             saveSettings();
-            closeMenu();
+            closeChaptersMenu();
         }
     });
 }
@@ -291,6 +295,25 @@ function closeMenu() {
     }
 }
 
+function toggleChaptersMenu() {
+    const chaptersMenu = document.getElementById('chaptersMenu');
+    console.log('Chapters toggle clicked');
+    if (chaptersMenu) {
+        chaptersMenu.classList.toggle('active');
+        console.log('Chapters menu state:', chaptersMenu.classList.contains('active') ? 'open' : 'closed');
+    } else {
+        console.error('chaptersMenu not found');
+    }
+}
+
+function closeChaptersMenu() {
+    const chaptersMenu = document.getElementById('chaptersMenu');
+    if (chaptersMenu && chaptersMenu.classList.contains('active')) {
+        chaptersMenu.classList.remove('active');
+        console.log('Chapters menu closed');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.getElementById('menuToggle');
     if (menuToggle) {
@@ -299,7 +322,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('menuToggle not found');
     }
-    // Привязываем события для кнопок изменения размера шрифта
+    const chaptersToggle = document.getElementById('chaptersToggle');
+    if (chaptersToggle) {
+        chaptersToggle.addEventListener('click', toggleChaptersMenu);
+        console.log('Chapters toggle initialized');
+    } else {
+        console.error('chaptersToggle not found');
+    }
     const fontSizeButtons = document.querySelectorAll('.font-size-controls button');
     fontSizeButtons.forEach(button => {
         button.addEventListener('click', () => {
