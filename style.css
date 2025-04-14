@@ -53,10 +53,13 @@ select, button {
     line-height: 1.5;
     scroll-behavior: smooth;
 }
-#bookContent span[id^="chapter-"] {
+#bookContent span[id^="line-"] {
     display: block;
+    margin-top: 0;
+}
+#bookContent span[id^="line-"][style*="bold"] {
     margin-top: 10px;
-    font-weight: bold;
+    background: rgba(0, 0, 0, 0.05);
 }
 .reader-controls {
     display: flex;
