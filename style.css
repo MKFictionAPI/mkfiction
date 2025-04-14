@@ -78,6 +78,9 @@ select, button {
     background: rgba(255, 255, 255, 0.8);
     border: 1px solid #ccc;
     text-align: left;
+    pointer-events: auto;
+    position: relative;
+    z-index: 20;
 }
 .nav-menu {
     display: none;
@@ -91,11 +94,15 @@ select, button {
     top: 40px;
     left: 0;
     right: 0;
-    z-index: 10;
+    z-index: 15;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    pointer-events: auto;
 }
 .nav-menu.active {
     display: flex;
+}
+.nav-menu select, .nav-menu button {
+    pointer-events: auto;
 }
 .font-size-controls {
     display: flex;
@@ -173,53 +180,4 @@ body.dark h1 {
     color: #bbb;
 }
 body.dark select, body.dark button {
-    background: rgba(0, 0, 0, 0.8);
-    border-color: #555;
-    color: #ddd;
-}
-body.dark .bookmark {
-    background: rgba(0, 0, 0, 0.7);
-}
-body.dark .nav-menu {
-    background: rgba(0, 0, 0, 0.95);
-    border-color: #555;
-}
-@media (max-width: 600px) {
-    body {
-        padding: 5px;
-    }
-    .container {
-        padding: 5px;
-    }
-    h1 {
-        font-size: 16px;
-        margin: 5px 0;
-    }
-    .author-photo {
-        width: 100px;
-        height: 100px;
-    }
-    select, button {
-        font-size: 11px;
-        padding: 5px;
-        width: 100%;
-    }
-    .controls {
-        flex-direction: column;
-        gap: 5px;
-    }
-    .reader-controls {
-        gap: 5px;
-    }
-    #bookContent {
-        padding: 10px;
-        font-size: 14px;
-        max-height: 50vh;
-    }
-    #bookSelectWelcome, #chapterSelect {
-        max-height: 120px;
-    }
-    .nav-menu {
-        top: 35px;
-    }
-}
+    background: rgba(0, 0,
