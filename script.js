@@ -152,20 +152,29 @@ function updateChapters() {
     }
     chapterSelect.innerHTML = '<option value="">-- Выбери главу --</option>';
     const text = books[currentBook];
-    if (!text) return;
-    const chapterRegex = /^# Глава \d+\.\s*[^\n]+/gm;
+    if (!text) {
+        console.error('No text for current book');
+        return;
+    }
+    const chapterRegex = /^#\s*Глава\s*\d+\.\s*[^\n]+/gm;
     let match;
     let index = 0;
+    console.log('Parsing chapters for:', currentBook);
     while ((match = chapterRegex.exec(text)) !== null) {
+        console.log('Found chapter:', match[0]);
         const option = document.createElement('option');
         option.value = match.index;
-        option.textContent = match[0].replace(/^# Глава \d+\.\s*/, 'Глава ' + (++index) + ': ');
+        option.textContent = match[0].replace(/^#\s*Глава\s*\d+\.\s*/, 'Глава ' + (++index) + ': ');
         chapterSelect.appendChild(option);
+    }
+    if (index === 0) {
+        console.warn('No chapters found in text');
     }
     chapterSelect.addEventListener('change', () => {
         if (chapterSelect.value) {
             const content = document.getElementById('bookContent');
             if (content) {
+                console.log('Scrolling to:', chapterSelect.value);
                 content.scrollTop = parseInt(chapterSelect.value);
                 saveSettings();
             }
