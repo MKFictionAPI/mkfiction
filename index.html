@@ -11,61 +11,59 @@
 <body class="light">
     <div class="container">
         <div id="welcomePage">
-            <h1>MKFiction</h1>
-            <img src="https://i.imgur.com/1qV8O7F.jpeg" alt="Author" class="author-photo">
-            <p>Добро пожаловать в мир историй!</p>
-            <div class="controls">
-                <select id="bookSelectWelcome">
-                    <option value="">-- Выбери книгу --</option>
-                    <option value="book1">Книга 1</option>
-                    <option value="book2">Книга 2</option>
-                    <option value="book3">Книга 3</option>
-                    <option value="book4">Книга 4</option>
-                    <option value="book5">Книга 5</option>
-                    <option value="book6">Книга 6</option>
-                    <option value="book7">Книга 7</option>
-                    <option value="book8">Книга 8</option>
-                    <option value="book9">Книга 9</option>
-                    <option value="book10">Книга 10</option>
-                    <option value="book11">Книга 11</option>
-                    <option value="book12">Книга 12</option>
-                    <option value="book13">Книга 13</option>
-                    <option value="book14">Книга 14</option>
-                    <option value="book15">Книга 15</option>
-                    <option value="book16">Книга 16</option>
-                    <option value="book17">Книга 17</option>
-                    <option value="book18">Книга 18</option>
-                    <option value="book19">Книга 19</option>
-                    <option value="book20">Книга 20</option>
+            <h1>Писатель Мария Карташева</h1>
+            <img src="author.webp" alt="Мария Карташева" class="author-photo">
+            <p>Добро пожаловать в мир историй Марии Карташевой! Здесь ждут тайны, тени и приключения. Выбери книгу и погрузись в чтение!</p>
+            <select id="bookSelectWelcome">
+                <option value="">-- Выбери книгу --</option>
+                <option value="book1">Тайник</option>
+                <option value="book2">Дорога к Тайнику. Часть 1</option>
+                <option value="book3">Дорога к Тайнику. Часть 2</option>
+                <option value="book4">Ключи к Тайнику</option>
+                <option value="book5">Тайник. Тыкулкас</option>
+                <option value="book6">Городской детектив. Часть 1. Тени прошлого</option>
+                <option value="book7">Городской детектив. Часть 2. Штопая сердца</option>
+                <option value="book8">Городской детектив. Часть 3. Смерть в отпечатках</option>
+                <option value="book9">Сломанный лёд</option>
+                <option value="book10">Сломанный лёд 2</option>
+                <option value="book11">Сломанный лёд 3</option>
+                <option value="book12">Сломанный лёд 4</option>
+                <option value="book13">Потерянные во времени</option>
+                <option value="book14">За дверью завтрашнего дня. Часть 1. Анамнез</option>
+                <option value="book15">За дверью завтрашнего дня. Часть 2. Диагноз</option>
+                <option value="book16">Мурцовка. Том 1</option>
+                <option value="book17">Зимний Эндшпиль</option>
+                <option value="book18">Созданная демоном. Книга первая. Васюганские болота</option>
+                <option value="book19">Простота вечности. Пробуждение</option>
+                <option value="book20">Ведьмина Кюля</option>
                 </select>
                 <button onclick="startReading()">Начать читать</button>
             </div>
         </div>
         <div id="readerPage" style="display: none;">
-            <h1>MKFiction</h1>
+            <h1>Писатель Мария Карташева</h1>
             <div class="controls">
                 <select id="bookSelect">
-                    <option value="">-- Выбери книгу --</option>
-                    <option value="book1">Книга 1</option>
-                    <option value="book2">Книга 2</option>
-                    <option value="book3">Книга 3</option>
-                    <option value="book4">Книга 4</option>
-                    <option value="book5">Книга 5</option>
-                    <option value="book6">Книга 6</option>
-                    <option value="book7">Книга 7</option>
-                    <option value="book8">Книга 8</option>
-                    <option value="book9">Книга 9</option>
-                    <option value="book10">Книга 10</option>
-                    <option value="book11">Книга 11</option>
-                    <option value="book12">Книга 12</option>
-                    <option value="book13">Книга 13</option>
-                    <option value="book14">Книга 14</option>
-                    <option value="book15">Книга 15</option>
-                    <option value="book16">Книга 16</option>
-                    <option value="book17">Книга 17</option>
-                    <option value="book18">Книга 18</option>
-                    <option value="book19">Книга 19</option>
-                    <option value="book20">Книга 20</option>
+                    <option value="book1">Тайник</option>
+                    <option value="book2">Дорога к Тайнику. Часть 1</option>
+                    <option value="book3">Дорога к Тайнику. Часть 2</option>
+                    <option value="book4">Ключи к Тайнику</option>
+                    <option value="book5">Тайник. Тыкулкас</option>
+                    <option value="book6">Городской детектив. Часть 1. Тени прошлого</option>
+                    <option value="book7">Городской детектив. Часть 2. Штопая сердца</option>
+                    <option value="book8">Городской детектив. Часть 3. Смерть в отпечатках</option>
+                    <option value="book9">Сломанный лёд</option>
+                    <option value="book10">Сломанный лёд 2</option>
+                    <option value="book11">Сломанный лёд 3</option>
+                    <option value="book12">Сломанный лёд 4</option>
+                    <option value="book13">Потерянные во времени</option>
+                    <option value="book14">За дверью завтрашнего дня. Часть 1. Анамнез</option>
+                    <option value="book15">За дверью завтрашнего дня. Часть 2. Диагноз</option>
+                    <option value="book16">Мурцовка. Том 1</option>
+                    <option value="book17">Зимний Эндшпиль</option>
+                    <option value="book18">Созданная демоном. Книга первая. Васюганские болота</option>
+                    <option value="book19">Простота вечности. Пробуждение</option>
+                    <option value="book20">Ведьмина Кюля</option>
                 </select>
             </div>
             <div id="bookContent"></div>
