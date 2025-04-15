@@ -30,7 +30,12 @@ function syncTheme() {
     const telegramTheme = WebApp.themeParams.bg_color?.toLowerCase() === '#212121' ? 'dark' : 'light';
     setTheme(telegramTheme);
     const themeSelect = document.getElementById('themeSelect');
-    if (themeSelect) themeSelect.value = telegramTheme;
+    if (themeSelect) {
+        themeSelect.value = telegramTheme;
+        console.log('Synced theme to:', telegramTheme);
+    } else {
+        console.error('themeSelect not found');
+    }
 }
 
 function loadSettings() {
@@ -63,6 +68,7 @@ function loadSettings() {
         if (themeSelect && settings.theme) {
             themeSelect.value = settings.theme;
             setTheme(settings.theme);
+            console.log('Loaded theme from settings:', settings.theme);
         }
     } else {
         showWelcome();
@@ -84,6 +90,7 @@ function saveSettings() {
         font: font,
         fontSize: fontSize
     }));
+    console.log('Saved settings with theme:', theme);
 }
 
 function showWelcome() {
@@ -349,6 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function setTheme(theme) {
     document.body.className = theme;
+    console.log('Theme set to:', theme);
 }
 
 function addBookmark() {
