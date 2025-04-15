@@ -34,8 +34,6 @@ select, button {
     border-radius: 5px;
     width: 100%;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ccc;
     transition: background 0.2s;
 }
 select:invalid {
@@ -48,7 +46,6 @@ select option:disabled {
     margin-bottom: 10px;
     max-height: 150px;
     overflow-y: auto;
-    color: #333;
 }
 #bookContent {
     border: 1px solid;
@@ -56,7 +53,6 @@ select option:disabled {
     font-size: 16px;
     white-space: pre-wrap;
     overflow-y: auto;
-    background: rgba(255, 255, 255, 0.95);
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     max-height: 70vh;
@@ -70,7 +66,6 @@ select option:disabled {
 }
 #bookContent span[id^="line-"][style*="bold"] {
     margin-top: 10px;
-    background: rgba(0, 0, 0, 0.05);
 }
 .reader-controls {
     position: fixed;
@@ -83,13 +78,11 @@ select option:disabled {
     font-size: 18px;
     cursor: pointer;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     transition: background 0.2s;
 }
 .menu-toggle:hover {
-    background: rgba(255, 255, 255, 1);
+    filter: brightness(1.1);
 }
 .nav-menu {
     position: fixed;
@@ -97,8 +90,7 @@ select option:disabled {
     left: -200px;
     width: 200px;
     height: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    border-right: 1px solid #ccc;
+    border-right: 1px solid;
     padding: 20px 10px;
     box-sizing: border-box;
     z-index: 190;
@@ -126,19 +118,16 @@ select option:disabled {
     cursor: pointer;
     border-radius: 5px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ccc;
     text-align: left;
     transition: background 0.2s;
 }
 .chapters-toggle:hover {
-    background: rgba(255, 255, 255, 1);
+    filter: brightness(1.1);
 }
 .chapters-menu {
     display: none;
     position: relative;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid #ccc;
+    border: 1px solid;
     border-radius: 5px;
     padding: 10px;
     z-index: 170;
@@ -174,16 +163,13 @@ select option:disabled {
 .bookmark {
     padding: 5px;
     cursor: pointer;
-    color: #2a2a8e;
     display: flex;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.7);
     margin: 2px 0;
     border-radius: 3px;
 }
 .bookmark:hover {
     text-decoration: underline;
-    background: rgba(255, 255, 255, 0.9);
 }
 .author-photo {
     display: block;
@@ -191,7 +177,7 @@ select option:disabled {
     border-radius: 50%;
     width: 150px;
     height: 150px;
-    border: 3px solid #444;
+    border: 3px solid;
 }
 p {
     text-align: center;
@@ -202,11 +188,52 @@ body.light {
     color: #333;
     background: #f5f5f5;
 }
+body.light .container {
+    background: transparent;
+}
 body.light #bookContent {
+    background: rgba(255, 255, 255, 0.95);
     border-color: #ccc;
+    color: #333;
+}
+body.light #bookContent span[id^="line-"][style*="bold"] {
+    background: rgba(0, 0, 0, 0.05);
 }
 body.light h1 {
     color: #444;
+}
+body.light select, body.light button {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: #ccc;
+    color: #333;
+}
+body.light select option {
+    color: #333;
+    background: #fff;
+}
+body.light #chapterSelect {
+    color: #333;
+    background: rgba(255, 255, 255, 0.8);
+}
+body.light .chapters-menu {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #ccc;
+}
+body.light .bookmark {
+    background: rgba(255, 255, 255, 0.7);
+    color: #2a2a8e;
+}
+body.light .nav-menu {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #ccc;
+}
+body.light .menu-toggle, body.light .chapters-toggle {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #ccc;
+    color: #333;
+}
+body.light .author-photo {
+    border-color: #444;
 }
 body.dark {
     color: #d8d8d8;
@@ -256,6 +283,60 @@ body.dark .menu-toggle, body.dark .chapters-toggle {
     border-color: #444;
     color: #d8d8d8;
 }
+body.dark .author-photo {
+    border-color: #666;
+}
+body.sepia {
+    color: #5c4033;
+    background: #f4ecd8;
+}
+body.sepia .container {
+    background: transparent;
+}
+body.sepia #bookContent {
+    background: #fdf6e3;
+    border-color: #d2b48c;
+    color: #5c4033;
+}
+body.sepia #bookContent span[id^="line-"][style*="bold"] {
+    background: rgba(255, 215, 0, 0.1);
+}
+body.sepia h1 {
+    color: #4a3728;
+}
+body.sepia select, body.sepia button {
+    background: #e6d9b8;
+    border-color: #d2b48c;
+    color: #5c4033;
+}
+body.sepia select option {
+    color: #5c4033;
+    background: #e6d9b8;
+}
+body.sepia #chapterSelect {
+    color: #5c4033;
+    background: #e6d9b8;
+}
+body.sepia .chapters-menu {
+    background: #e6d9b8;
+    border-color: #d2b48c;
+}
+body.sepia .bookmark {
+    background: rgba(230, 217, 184, 0.7);
+    color: #4a3728;
+}
+body.sepia .nav-menu {
+    background: #e6d9b8;
+    border-color: #d2b48c;
+}
+body.sepia .menu-toggle, body.sepia .chapters-toggle {
+    background: #e6d9b8;
+    border-color: #d2b48c;
+    color: #5c4033;
+}
+body.sepia .author-photo {
+    border-color: #8b6f47;
+}
 @media (min-width: 601px) {
     .nav-menu {
         position: static;
@@ -263,7 +344,6 @@ body.dark .menu-toggle, body.dark .chapters-toggle {
         transform: none;
         width: 200px;
         height: auto;
-        border: 1px solid #ccc;
         border-radius: 5px;
         margin-top: 10px;
     }
