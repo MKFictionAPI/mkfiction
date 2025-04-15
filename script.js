@@ -213,10 +213,13 @@ function updateChapters() {
                 span.style.fontWeight = 'normal';
                 span.style.background = 'none';
             });
-            if (target) {
+            if (target && content) {
                 target.style.fontWeight = 'bold';
                 target.style.background = 'rgba(0, 0, 0, 0.05)';
-                const targetTop = target.offsetTop - 20;
+                const rect = target.getBoundingClientRect();
+                const contentRect = content.getBoundingClientRect();
+                const scrollTop = content.scrollTop;
+                const targetTop = rect.top - contentRect.top + scrollTop - 20; // Отступ сверху
                 content.scrollTo({ top: targetTop, behavior: 'smooth' });
                 console.log('Scrolled to:', target.textContent, 'at offset:', targetTop);
             } else {
