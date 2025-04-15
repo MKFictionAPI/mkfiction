@@ -208,19 +208,15 @@ function updateChapters() {
             const lineNum = parseInt(chapterSelect.value);
             console.log('Attempting to scroll to line:', lineNum);
             const target = document.getElementById(`line-${lineNum}`);
-            const content = document.getElementById('bookContent');
             const spans = content.querySelectorAll('span[id^="line-"]');
             spans.forEach(span => {
                 span.style.fontWeight = 'normal';
                 span.style.background = 'none';
             });
-            if (target && content) {
+            if (target) {
                 target.style.fontWeight = 'bold';
                 target.style.background = 'rgba(0, 0, 0, 0.05)';
-                const rect = target.getBoundingClientRect();
-                const contentRect = content.getBoundingClientRect();
-                const scrollTop = content.scrollTop;
-                const targetTop = rect.top - contentRect.top + scrollTop;
+                const targetTop = target.offsetTop - 20;
                 content.scrollTo({ top: targetTop, behavior: 'smooth' });
                 console.log('Scrolled to:', target.textContent, 'at offset:', targetTop);
             } else {
@@ -249,26 +245,6 @@ function changeFontSize(delta) {
 
 const bookSelect = document.getElementById('bookSelect');
 if (bookSelect) {
-    bookSelect.addEventListener('change', function() {
-        if (this.value) {
-            currentBook = this.value;
-            showReader();
-            saveSettings();
-        }
-    });
-}
-
-const themeSelect = document.getElementById('themeSelect');
-if (themeSelect) {
-    themeSelect.addEventListener('change', function() {
-        setTheme(this.value);
-        saveSettings();
-        closeMenu();
-    });
-}
-
-const fontSelect = document.getElementById('fontSelect');
-if (fontSelect) {
     bookSelect.addEventListener('change', function() {
         if (this.value) {
             currentBook = this.value;
