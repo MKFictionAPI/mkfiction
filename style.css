@@ -227,14 +227,22 @@ body.dark select, body.dark button {
     border-color: #555;
     color: #ddd;
 }
+body.dark select option {
+    color: #ddd;
+    background: #333;
+}
+body.dark #chapterSelect {
+    color: #ddd;
+    background: rgba(0, 0, 0, 0.8);
+}
+body.dark .chapters-menu {
+    background: rgba(0, 0, 0, 0.95);
+    border-color: #555;
+}
 body.dark .bookmark {
     background: rgba(0, 0, 0, 0.7);
 }
 body.dark .nav-menu {
-    background: rgba(0, 0, 0, 0.95);
-    border-color: #555;
-}
-body.dark .chapters-menu {
     background: rgba(0, 0, 0, 0.95);
     border-color: #555;
 }
