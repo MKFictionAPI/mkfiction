@@ -216,17 +216,18 @@ function updateChapters() {
             if (target && content) {
                 target.style.fontWeight = 'bold';
                 target.style.background = 'rgba(0, 0, 0, 0.05)';
-                const rect = target.getBoundingClientRect();
-                const contentRect = content.getBoundingClientRect();
-                const scrollTop = content.scrollTop;
-                const targetTop = rect.top - contentRect.top + scrollTop - 20; // Отступ сверху
-                content.scrollTo({ top: targetTop, behavior: 'smooth' });
-                console.log('Scrolled to:', target.textContent, 'at offset:', targetTop);
+                const targetTop = target.offsetTop - 30; // Отступ сверху
+                setTimeout(() => {
+                    content.scrollTo({ top: targetTop, behavior: 'smooth' });
+                    console.log('Scrolled to:', target.textContent, 'at offset:', targetTop);
+                }, 100); // Задержка для DOM
             } else {
                 console.warn('Target line not found:', `line-${lineNum}`);
                 const fontSize = parseFloat(getComputedStyle(content).fontSize);
                 const lineHeight = parseFloat(getComputedStyle(content).lineHeight) || fontSize * 1.5;
-                content.scrollTo({ top: lineNum * lineHeight, behavior: 'smooth' });
+                setTimeout(() => {
+                    content.scrollTo({ top: lineNum * lineHeight, behavior: 'smooth' });
+                }, 100);
             }
             saveSettings();
             closeChaptersMenu();
