@@ -59,6 +59,11 @@ function loadSettings() {
             const fontSizeDisplay = document.getElementById('fontSizeDisplay');
             if (fontSizeDisplay) fontSizeDisplay.textContent = `${settings.fontSize}px`;
         }
+        const themeSelect = document.getElementById('themeSelect');
+        if (themeSelect && settings.theme) {
+            themeSelect.value = settings.theme;
+            setTheme(settings.theme);
+        }
     } else {
         showWelcome();
     }
@@ -70,11 +75,12 @@ function saveSettings() {
     const scrollPos = content ? content.scrollTop : 0;
     const font = document.getElementById('fontSelect')?.value || 'Georgia';
     const fontSize = parseInt(content?.style.fontSize || '16');
+    const theme = document.getElementById('themeSelect')?.value || 'light';
     localStorage.setItem(`mkfiction_${WebApp.initDataUnsafe.user?.id || 'guest'}`, JSON.stringify({
         book: currentBook,
         scrollPos: scrollPos,
         bookmarks: bookmarks,
-        theme: document.getElementById('themeSelect')?.value || 'light',
+        theme: theme,
         font: font,
         fontSize: fontSize
     }));
@@ -216,11 +222,11 @@ function updateChapters() {
             if (target && content) {
                 target.style.fontWeight = 'bold';
                 target.style.background = 'rgba(0, 0, 0, 0.05)';
-                const targetTop = target.offsetTop - 30; // Отступ сверху
+                const targetTop = target.offsetTop - 30;
                 setTimeout(() => {
                     content.scrollTo({ top: targetTop, behavior: 'smooth' });
                     console.log('Scrolled to:', target.textContent, 'at offset:', targetTop);
-                }, 100); // Задержка для DOM
+                }, 100);
             } else {
                 console.warn('Target line not found:', `line-${lineNum}`);
                 const fontSize = parseFloat(getComputedStyle(content).fontSize);
