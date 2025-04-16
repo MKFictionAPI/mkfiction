@@ -105,6 +105,7 @@ function showWelcome() {
         const bookSelect = document.getElementById('bookSelectWelcome');
         if (bookSelect) bookSelect.value = '';
         localStorage.removeItem(`mkfiction_${WebApp.initDataUnsafe.user?.id || 'guest'}`);
+        loadCovers();
     } else {
         console.error('Welcome or reader page not found');
     }
@@ -292,6 +293,62 @@ function contactWriter() {
     closeMenu();
 }
 
+function loadCovers() {
+    const coverContainer = document.getElementById('coverContainer');
+    const bookSelect = document.getElementById('bookSelectWelcome');
+    if (!coverContainer || !bookSelect) return;
+
+    coverContainer.innerHTML = '';
+    const books = [
+        { id: 'book1', title: 'Тайник' },
+        { id: 'book2', title: 'Дорога к Тайнику. Часть 1' },
+        { id: 'book3', title: 'Дорога к Тайнику. Часть 2' },
+        { id: 'book4', title: 'Ключи к Тайнику' },
+        { id: 'book5', title: 'Тайник. Тыкулкас' },
+        { id: 'book6', title: 'Городской детектив. Часть 1. Тени прошлого' },
+        { id: 'book7', title: 'Городской детектив. Часть 2. Штопая сердца' },
+        { id: 'book8', title: 'Городской детектив. Часть 3. Смерть в отпечатках' },
+        { id: 'book9', title: 'Сломанный лёд' },
+        { id: 'book10', title: 'Сломанный лёд 2' },
+        { id: 'book11', title: 'Сломанный лёд 3' },
+        { id: 'book12', title: 'Сломанный лёд 4' },
+        { id: 'book13', title: 'Потерянные во времени' },
+        { id: 'book14', title: 'За дверью завтрашнего дня. Часть 1. Анамнез' },
+        { id: 'book15', title: 'За дверью завтрашнего дня. Часть 2. Диагноз' },
+        { id: 'book16', title: 'Мурцовка. Том 1' },
+        { id: 'book17', title: 'Зимний Эндшпиль' },
+        { id: 'book18', title: 'Созданная демоном. Книга первая. Васюганские болота' },
+        { id: 'book19', title: 'Простота вечности. Пробуждение' },
+        { id: 'book20', title: 'Ведьмина Кюля' }
+    ];
+
+    books.forEach(book => {
+        const coverItem = document.createElement('div');
+        coverItem.className = 'cover-item';
+        coverItem.dataset.bookId = book.id;
+        const img = document.createElement('img');
+        img.src = `covers/${book.id}.jpg`;
+        img.alt = book.title;
+        img.title = book.title;
+        coverItem.appendChild(img);
+        coverContainer.appendChild(coverItem);
+
+        coverItem.addEventListener('click', () => {
+            bookSelect.value = book.id;
+            document.querySelectorAll('.cover-item').forEach(item => item.classList.remove('selected'));
+            coverItem.classList.add('selected');
+            startReading();
+        });
+    });
+
+    bookSelect.addEventListener('change', () => {
+        const selectedBook = bookSelect.value;
+        document.querySelectorAll('.cover-item').forEach(item => {
+            item.classList.toggle('selected', item.dataset.bookId === selectedBook);
+        });
+    });
+}
+
 const bookSelect = document.getElementById('bookSelect');
 if (bookSelect) {
     bookSelect.addEventListener('change', function() {
@@ -384,6 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
             changeFontSize(delta);
         });
     });
+    loadCovers();
 });
 
 function setTheme(theme) {
