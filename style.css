@@ -214,8 +214,19 @@ select option:disabled {
     text-align: center;
     z-index: 195;
 }
-#bookmarksList {
-    margin-top: 10px;
+.bookmarks-menu {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    max-height: 200px;
+    overflow-y: auto;
+}
+.bookmarks-menu.active {
+    display: flex;
 }
 .bookmark {
     padding: 5px;
@@ -309,6 +320,10 @@ body.light .chapters-menu {
     background: rgba(255, 255, 255, 0.95);
     border-color: #ccc;
 }
+body.light .bookmarks-menu {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #ccc;
+}
 body.light .bookmark {
     background: rgba(255, 255, 255, 0.7);
     color: #2a2a8e;
@@ -375,6 +390,10 @@ body.dark .chapters-menu {
     background: #2a2a2a;
     border-color: #444;
 }
+body.dark .bookmarks-menu {
+    background: #2a2a2a;
+    border-color: #444;
+}
 body.dark .bookmark {
     background: rgba(0, 0, 0, 0.7);
     color: #a0a0ff;
@@ -438,6 +457,10 @@ body.sepia #chapterSelect {
     color: #5c4033;
 }
 body.sepia .chapters-menu {
+    background: #e6d9b8;
+    border-color: #d2b48c;
+}
+body.sepia .bookmarks-menu {
     background: #e6d9b8;
     border-color: #d2b48c;
 }
