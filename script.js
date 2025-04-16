@@ -387,6 +387,9 @@ function toggleMenu() {
     if (navMenu) {
         navMenu.classList.toggle('active');
         console.log('Menu state:', navMenu.classList.contains('active') ? 'open' : 'closed');
+        if (!navMenu.classList.contains('active')) {
+            closeBookmarksMenu();
+        }
     } else {
         console.error('navMenu not found');
     }
@@ -397,6 +400,7 @@ function closeMenu() {
     if (navMenu && navMenu.classList.contains('active')) {
         navMenu.classList.remove('active');
         console.log('Menu closed');
+        closeBookmarksMenu();
     }
 }
 
@@ -416,6 +420,28 @@ function closeChaptersMenu() {
     if (chaptersMenu && chaptersMenu.classList.contains('active')) {
         chaptersMenu.classList.remove('active');
         console.log('Chapters menu closed');
+    }
+}
+
+function toggleBookmarksMenu() {
+    const bookmarksMenu = document.getElementById('bookmarksMenu');
+    console.log('Bookmarks toggle clicked');
+    if (bookmarksMenu) {
+        bookmarksMenu.classList.toggle('active');
+        console.log('Bookmarks menu state:', bookmarksMenu.classList.contains('active') ? 'open' : 'closed');
+        if (bookmarksMenu.classList.contains('active')) {
+            updateBookmarks();
+        }
+    } else {
+        console.error('bookmarksMenu not found');
+    }
+}
+
+function closeBookmarksMenu() {
+    const bookmarksMenu = document.getElementById('bookmarksMenu');
+    if (bookmarksMenu && bookmarksMenu.classList.contains('active')) {
+        bookmarksMenu.classList.remove('active');
+        console.log('Bookmarks menu closed');
     }
 }
 
@@ -450,18 +476,19 @@ function setTheme(theme) {
 }
 
 function addBookmark() {
-    if (!currentBook) return;
+    if (!currentBook) {
+        WebApp.showAlert('Выбери книгу, чтобы добавить закладку!');
+        return;
+    }
     const content = document.getElementById('bookContent');
     if (!content) return;
     const scrollPos = content.scrollTop;
-    const name = prompt('Назови закладку:', `Закладка ${scrollPos}`);
-    if (name) {
-        bookmarks.push({ book: currentBook, scrollPos, name });
-        updateBookmarks();
-        saveSettings();
-        WebApp.showAlert(`Закладка "${name}" сохранена!`);
-        closeMenu();
-    }
+    const name = prompt('Назови закладку:', '') || `Закладка ${bookmarks.length + 1}`;
+    bookmarks.push({ book: currentBook, scrollPos, name });
+    updateBookmarks();
+    saveSettings();
+    WebApp.showAlert(`Закладка "${name}" сохранена!`);
+    closeMenu();
 }
 
 function deleteBookmark(index) {
@@ -471,17 +498,19 @@ function deleteBookmark(index) {
     WebApp.showAlert('Закладка удалена!');
 }
 
-function showBookmarks() {
-    updateBookmarks();
-    closeMenu();
-}
-
 function updateBookmarks() {
-    const list = document.getElementById('bookmarksList');
+    const list = document.getElementById('bookmarksMenu');
     if (!list) return;
     list.innerHTML = '';
-    bookmarks.forEach((bm, index) => {
-        if (bm.book === currentBook) {
+    const currentBookmarks = bookmarks.filter(bm => bm.book === currentBook);
+    if (currentBookmarks.length === 0) {
+        const empty = document.createElement('div');
+        empty.textContent = 'Нет закладок';
+        empty.style.padding = '5px';
+        empty.style.color = 'inherit';
+        list.appendChild(empty);
+    } else {
+        currentBookmarks.forEach((bm, index) => {
             const div = document.createElement('div');
             div.className = 'bookmark';
             const text = document.createElement('span');
@@ -491,6 +520,7 @@ function updateBookmarks() {
                 if (content) {
                     content.scrollTop = bm.scrollPos;
                     saveSettings();
+                    closeBookmarksMenu();
                 }
             };
             const deleteBtn = document.createElement('span');
@@ -500,8 +530,8 @@ function updateBookmarks() {
             div.appendChild(text);
             div.appendChild(deleteBtn);
             list.appendChild(div);
-        }
-    });
+        });
+    }
 }
 
 const urlParams = new URLSearchParams(window.location.search);
