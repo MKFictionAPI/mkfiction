@@ -35,7 +35,7 @@ select, button {
     border-radius: 5px;
     width: 100%;
     box-sizing: border-box;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.2s;
 }
 select:invalid {
     color: #888;
@@ -54,12 +54,25 @@ select option:disabled {
     font-size: 16px;
     white-space: normal;
     overflow-y: auto;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     max-height: 70vh;
     line-height: 1.6;
     scroll-behavior: smooth;
     min-height: 100px;
+    position: relative;
+}
+#bookContent::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 2px solid;
+    border-radius: 12px;
+    opacity: 0.3;
+    pointer-events: none;
 }
 #bookContent h2 {
     font-size: 1.5em;
@@ -75,7 +88,7 @@ select option:disabled {
     font-style: normal;
 }
 #bookContent [id^="line-"][style*="bold"] {
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(0,0,0,0.05);
 }
 .reader-controls {
     position: fixed;
@@ -89,10 +102,10 @@ select option:disabled {
     cursor: pointer;
     border-radius: 50%;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.2s;
 }
 .menu-toggle:hover {
-    filter: brightness(1.1);
+    transform: scale(1.1);
 }
 .nav-menu {
     position: fixed;
@@ -116,6 +129,22 @@ select option:disabled {
 .nav-menu select, .nav-menu button {
     pointer-events: auto;
     z-index: 195;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(200,200,200,0.1));
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255,255,255,0.2);
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+.nav-menu button:hover, .nav-menu select:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.3);
+}
+.nav-menu button:active, .nav-menu select:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,0.2);
 }
 .chapters-controls {
     margin: 10px 0;
@@ -123,25 +152,32 @@ select option:disabled {
     z-index: 180;
 }
 .chapters-toggle {
-    padding: 8px;
+    padding: 10px;
     font-size: 14px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
     width: 100%;
     text-align: left;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.2s;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(200,200,200,0.1));
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 .chapters-toggle:hover {
-    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+.chapters-toggle:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .chapters-menu {
     display: none;
     position: relative;
     border: 1px solid;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 10px;
     z-index: 170;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     pointer-events: auto;
 }
 .chapters-menu.active {
@@ -158,8 +194,19 @@ select option:disabled {
 }
 .font-size-controls button {
     width: 40px;
-    padding: 5px;
+    padding: 8px;
     z-index: 195;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(200,200,200,0.1));
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+.font-size-controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+.font-size-controls button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .font-size-controls span {
     font-size: 14px;
@@ -176,7 +223,7 @@ select option:disabled {
     display: flex;
     justify-content: space-between;
     margin: 2px 0;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 .bookmark:hover {
     text-decoration: underline;
@@ -234,6 +281,9 @@ body.light #bookContent {
     border-color: #ccc;
     color: #333;
 }
+body.light #bookContent::before {
+    border-color: #666;
+}
 body.light #bookContent h2 {
     color: #222;
 }
@@ -254,7 +304,6 @@ body.light select option {
 }
 body.light #chapterSelect {
     color: #333;
-    background: rgba(255, 255, 255, 0.8);
 }
 body.light .chapters-menu {
     background: rgba(255, 255, 255, 0.95);
@@ -268,9 +317,16 @@ body.light .nav-menu {
     background: rgba(255, 255, 255, 0.95);
     border-color: #ccc;
 }
+body.light .nav-menu select, body.light .nav-menu button {
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    color: #333;
+}
 body.light .menu-toggle, body.light .chapters-toggle {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: #ccc;
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    color: #333;
+}
+body.light .font-size-controls button {
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
     color: #333;
 }
 body.light .author-photo {
@@ -290,6 +346,9 @@ body.dark #bookContent {
     background: #1a1a1a;
     border-color: #444;
     color: #d8d8d8;
+}
+body.dark #bookContent::before {
+    border-color: #888;
 }
 body.dark #bookContent h2 {
     color: #ccc;
@@ -311,7 +370,6 @@ body.dark select option {
 }
 body.dark #chapterSelect {
     color: #d8d8d8;
-    background: #2a2a2a;
 }
 body.dark .chapters-menu {
     background: #2a2a2a;
@@ -325,9 +383,16 @@ body.dark .nav-menu {
     background: #2a2a2a;
     border-color: #444;
 }
+body.dark .nav-menu select, body.dark .nav-menu button {
+    background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
+    color: #d8d8d8;
+}
 body.dark .menu-toggle, body.dark .chapters-toggle {
-    background: #2a2a2a;
-    border-color: #444;
+    background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
+    color: #d8d8d8;
+}
+body.dark .font-size-controls button {
+    background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
     color: #d8d8d8;
 }
 body.dark .author-photo {
@@ -347,6 +412,9 @@ body.sepia #bookContent {
     background: #fdf6e3;
     border-color: #d2b48c;
     color: #5c4033;
+}
+body.sepia #bookContent::before {
+    border-color: #8b6f47;
 }
 body.sepia #bookContent h2 {
     color: #4a3728;
@@ -368,7 +436,6 @@ body.sepia select option {
 }
 body.sepia #chapterSelect {
     color: #5c4033;
-    background: #e6d9b8;
 }
 body.sepia .chapters-menu {
     background: #e6d9b8;
@@ -382,9 +449,16 @@ body.sepia .nav-menu {
     background: #e6d9b8;
     border-color: #d2b48c;
 }
+body.sepia .nav-menu select, body.sepia .nav-menu button {
+    background: linear-gradient(135deg, #f0e4c0, #d8c8a0);
+    color: #5c4033;
+}
 body.sepia .menu-toggle, body.sepia .chapters-toggle {
-    background: #e6d9b8;
-    border-color: #d2b48c;
+    background: linear-gradient(135deg, #f0e4c0, #d8c8a0);
+    color: #5c4033;
+}
+body.sepia .font-size-controls button {
+    background: linear-gradient(135deg, #f0e4c0, #d8c8a0);
     color: #5c4033;
 }
 body.sepia .author-photo {
@@ -400,7 +474,7 @@ body.sepia .cover-item.selected {
         transform: none;
         width: 200px;
         height: auto;
-        border-radius: 5px;
+        border-radius: 10px;
         margin-top: 10px;
     }
     .menu-toggle {
