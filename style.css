@@ -56,16 +56,22 @@ select option:disabled {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     max-height: 70vh;
-    line-height: 1.5;
+    line-height: 1.6;
     scroll-behavior: smooth;
     min-height: 100px;
 }
-#bookContent span[id^="line-"] {
-    display: block;
-    margin-top: 0;
+#bookContent h2 {
+    font-size: 1.5em;
+    margin: 20px 0 10px;
+    font-weight: bold;
+    text-align: left;
 }
-#bookContent span[id^="line-"][style*="bold"] {
-    margin-top: 10px;
+#bookContent p {
+    margin: 10px 0;
+    text-indent: 20px;
+}
+#bookContent [id^="line-"][style*="bold"] {
+    background: rgba(0, 0, 0, 0.05);
 }
 .reader-controls {
     position: fixed;
@@ -196,7 +202,10 @@ body.light #bookContent {
     border-color: #ccc;
     color: #333;
 }
-body.light #bookContent span[id^="line-"][style*="bold"] {
+body.light #bookContent h2 {
+    color: #222;
+}
+body.light #bookContent [id^="line-"][style*="bold"] {
     background: rgba(0, 0, 0, 0.05);
 }
 body.light h1 {
@@ -247,7 +256,10 @@ body.dark #bookContent {
     border-color: #444;
     color: #d8d8d8;
 }
-body.dark #bookContent span[id^="line-"][style*="bold"] {
+body.dark #bookContent h2 {
+    color: #ccc;
+}
+body.dark #bookContent [id^="line-"][style*="bold"] {
     background: rgba(255, 255, 255, 0.1);
 }
 body.dark h1 {
@@ -298,7 +310,10 @@ body.sepia #bookContent {
     border-color: #d2b48c;
     color: #5c4033;
 }
-body.sepia #bookContent span[id^="line-"][style*="bold"] {
+body.sepia #bookContent h2 {
+    color: #4a3728;
+}
+body.sepia #bookContent [id^="line-"][style*="bold"] {
     background: rgba(255, 215, 0, 0.1);
 }
 body.sepia h1 {
@@ -389,6 +404,9 @@ body.sepia .author-photo {
         padding: 10px;
         font-size: 14px;
         max-height: 80vh;
+    }
+    #bookContent h2 {
+        font-size: 1.3em;
     }
     #bookSelectWelcome, #bookSelect, #chapterSelect {
         max-height: 120px;
