@@ -246,15 +246,16 @@ function updateChapters() {
             const lineNum = parseInt(chapterSelect.value);
             console.log('Attempting to scroll to line:', lineNum);
             const target = document.getElementById(`line-${lineNum}`);
-            const spans = content.querySelectorAll('[id^="line-"]');
-            spans.forEach(span => {
-                span.style.fontWeight = 'normal';
-                span.style.background = 'none';
+            const elements = content.querySelectorAll('[id^="line-"]');
+            elements.forEach(el => {
+                el.style.fontWeight = 'normal';
+                el.style.background = 'none';
             });
             if (target && content) {
                 target.style.fontWeight = 'bold';
                 target.style.background = 'rgba(0, 0, 0, 0.05)';
-                const targetTop = target.offsetTop - 30;
+                const contentHeight = content.clientHeight;
+                const targetTop = target.offsetTop - contentHeight / 2 + target.offsetHeight / 2;
                 setTimeout(() => {
                     content.scrollTo({ top: targetTop, behavior: 'smooth' });
                     console.log('Scrolled to:', target.textContent, 'at offset:', targetTop);
@@ -263,8 +264,9 @@ function updateChapters() {
                 console.warn('Target line not found:', `line-${lineNum}`);
                 const fontSize = parseFloat(getComputedStyle(content).fontSize);
                 const lineHeight = parseFloat(getComputedStyle(content).lineHeight) || fontSize * 1.5;
+                const targetTop = lineNum * lineHeight - content.clientHeight / 2;
                 setTimeout(() => {
-                    content.scrollTo({ top: lineNum * lineHeight, behavior: 'smooth' });
+                    content.scrollTo({ top: targetTop, behavior: 'smooth' });
                 }, 100);
             }
             saveSettings();
@@ -282,6 +284,11 @@ function changeFontSize(delta) {
     content.style.fontSize = `${currentSize}px`;
     fontSizeDisplay.textContent = `${currentSize}px`;
     saveSettings();
+    closeMenu();
+}
+
+function contactWriter() {
+    window.open('https://t.me/mkbestwritermk', '_blank');
     closeMenu();
 }
 
