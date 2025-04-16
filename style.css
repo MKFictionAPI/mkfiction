@@ -71,7 +71,7 @@ select option:disabled {
     bottom: 0;
     max-height: 100vh;
     width: 100%;
-    z-index: 300;
+    z-index: 200;
     margin: 0;
     border: none;
     border-radius: 0;
@@ -116,7 +116,10 @@ select option:disabled {
     position: fixed;
     top: 10px;
     right: 10px;
-    z-index: 200;
+    z-index: 300;
+}
+.reader-controls.fullscreen-hidden {
+    display: none;
 }
 .menu-toggle {
     padding: 8px 12px;
@@ -138,7 +141,7 @@ select option:disabled {
     border-right: 1px solid;
     padding: 20px 10px;
     box-sizing: border-box;
-    z-index: 190;
+    z-index: 290;
     transition: transform 0.3s ease-in-out;
     pointer-events: auto;
     display: flex;
@@ -150,7 +153,7 @@ select option:disabled {
 }
 .nav-menu select, .nav-menu button {
     pointer-events: auto;
-    z-index: 195;
+    z-index: 295;
     border: none;
     border-radius: 8px;
     padding: 10px;
