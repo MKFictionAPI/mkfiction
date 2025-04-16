@@ -456,7 +456,10 @@ function toggleFullscreen() {
     const content = document.getElementById('bookContent');
     const fullscreenBtn = document.querySelector('#navMenu button[onclick="toggleFullscreen()"]');
     const readerPage = document.getElementById('readerPage');
-    if (!content || !fullscreenBtn || !readerPage) {
+    const header = document.querySelector('#readerPage h1');
+    const chaptersControls = document.querySelector('.chapters-controls');
+    const bookControls = document.querySelector('#readerPage .controls');
+    if (!content || !fullscreenBtn || !readerPage || !header || !chaptersControls || !bookControls) {
         console.error('Fullscreen elements not found');
         return;
     }
@@ -464,11 +467,17 @@ function toggleFullscreen() {
         content.classList.remove('fullscreen');
         fullscreenBtn.textContent = 'На весь экран';
         readerPage.classList.remove('fullscreen-mode');
+        header.style.display = 'block';
+        chaptersControls.style.display = 'block';
+        bookControls.style.display = 'flex';
         console.log('Exited fullscreen');
     } else {
         content.classList.add('fullscreen');
         fullscreenBtn.textContent = 'Выйти из полноэкранного';
         readerPage.classList.add('fullscreen-mode');
+        header.style.display = 'none';
+        chaptersControls.style.display = 'none';
+        bookControls.style.display = 'none';
         closeMenu();
         console.log('Entered fullscreen');
     }
@@ -479,10 +488,16 @@ function exitFullscreen() {
     const content = document.getElementById('bookContent');
     const fullscreenBtn = document.querySelector('#navMenu button[onclick="toggleFullscreen()"]');
     const readerPage = document.getElementById('readerPage');
+    const header = document.querySelector('#readerPage h1');
+    const chaptersControls = document.querySelector('.chapters-controls');
+    const bookControls = document.querySelector('#readerPage .controls');
     if (content && content.classList.contains('fullscreen')) {
         content.classList.remove('fullscreen');
         if (fullscreenBtn) fullscreenBtn.textContent = 'На весь экран';
         if (readerPage) readerPage.classList.remove('fullscreen-mode');
+        if (header) header.style.display = 'block';
+        if (chaptersControls) chaptersControls.style.display = 'block';
+        if (bookControls) bookControls.style.display = 'flex';
         console.log('Forced exit fullscreen');
         saveSettings();
     }
