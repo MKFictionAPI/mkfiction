@@ -124,6 +124,7 @@ function showReader() {
 }
 
 function backToWelcome() {
+    exitFullscreen();
     showWelcome();
     closeMenu();
 }
@@ -386,10 +387,11 @@ function toggleMenu() {
     console.log('Menu toggle clicked');
     if (navMenu) {
         navMenu.classList.toggle('active');
-        console.log('Menu state:', navMenu.classList.contains('active') ? 'open' : 'closed');
         if (!navMenu.classList.contains('active')) {
             closeBookmarksMenu();
+            closeChaptersMenu();
         }
+        console.log('Menu state:', navMenu.classList.contains('active') ? 'open' : 'closed');
     } else {
         console.error('navMenu not found');
     }
@@ -399,8 +401,9 @@ function closeMenu() {
     const navMenu = document.getElementById('navMenu');
     if (navMenu && navMenu.classList.contains('active')) {
         navMenu.classList.remove('active');
-        console.log('Menu closed');
         closeBookmarksMenu();
+        closeChaptersMenu();
+        console.log('Menu closed');
     }
 }
 
@@ -409,6 +412,9 @@ function toggleChaptersMenu() {
     console.log('Chapters toggle clicked');
     if (chaptersMenu) {
         chaptersMenu.classList.toggle('active');
+        if (chaptersMenu.classList.contains('active')) {
+            closeBookmarksMenu();
+        }
         console.log('Chapters menu state:', chaptersMenu.classList.contains('active') ? 'open' : 'closed');
     } else {
         console.error('chaptersMenu not found');
@@ -428,10 +434,11 @@ function toggleBookmarksMenu() {
     console.log('Bookmarks toggle clicked');
     if (bookmarksMenu) {
         bookmarksMenu.classList.toggle('active');
-        console.log('Bookmarks menu state:', bookmarksMenu.classList.contains('active') ? 'open' : 'closed');
         if (bookmarksMenu.classList.contains('active')) {
             updateBookmarks();
+            closeChaptersMenu();
         }
+        console.log('Bookmarks menu state:', bookmarksMenu.classList.contains('active') ? 'open' : 'closed');
     } else {
         console.error('bookmarksMenu not found');
     }
@@ -442,6 +449,42 @@ function closeBookmarksMenu() {
     if (bookmarksMenu && bookmarksMenu.classList.contains('active')) {
         bookmarksMenu.classList.remove('active');
         console.log('Bookmarks menu closed');
+    }
+}
+
+function toggleFullscreen() {
+    const content = document.getElementById('bookContent');
+    const fullscreenBtn = document.querySelector('#navMenu button[onclick="toggleFullscreen()"]');
+    const readerPage = document.getElementById('readerPage');
+    if (!content || !fullscreenBtn || !readerPage) {
+        console.error('Fullscreen elements not found');
+        return;
+    }
+    if (content.classList.contains('fullscreen')) {
+        content.classList.remove('fullscreen');
+        fullscreenBtn.textContent = 'На весь экран';
+        readerPage.classList.remove('fullscreen-mode');
+        console.log('Exited fullscreen');
+    } else {
+        content.classList.add('fullscreen');
+        fullscreenBtn.textContent = 'Выйти из полноэкранного';
+        readerPage.classList.add('fullscreen-mode');
+        closeMenu();
+        console.log('Entered fullscreen');
+    }
+    saveSettings();
+}
+
+function exitFullscreen() {
+    const content = document.getElementById('bookContent');
+    const fullscreenBtn = document.querySelector('#navMenu button[onclick="toggleFullscreen()"]');
+    const readerPage = document.getElementById('readerPage');
+    if (content && content.classList.contains('fullscreen')) {
+        content.classList.remove('fullscreen');
+        if (fullscreenBtn) fullscreenBtn.textContent = 'На весь экран';
+        if (readerPage) readerPage.classList.remove('fullscreen-mode');
+        console.log('Forced exit fullscreen');
+        saveSettings();
     }
 }
 
@@ -483,44 +526,51 @@ function addBookmark() {
     const content = document.getElementById('bookContent');
     if (!content) return;
     const scrollPos = content.scrollTop;
-    const name = prompt('Назови закладку:', '') || `Закладка ${bookmarks.length + 1}`;
-    bookmarks.push({ book: currentBook, scrollPos, name });
+    const name = prompt('Назови закладку:', '');
+    if (name === null) return;
+    const bookmarkName = name.trim() || `Закладка ${bookmarks.length + 1}`;
+    bookmarks.push({ book: currentBook, scrollPos, name: bookmarkName });
     updateBookmarks();
     saveSettings();
-    WebApp.showAlert(`Закладка "${name}" сохранена!`);
+    WebApp.showAlert(`Закладка "${bookmarkName}" сохранена!`);
     closeMenu();
 }
 
 function deleteBookmark(index) {
+    const bookmarkName = bookmarks[index].name;
     bookmarks.splice(index, 1);
     updateBookmarks();
     saveSettings();
-    WebApp.showAlert('Закладка удалена!');
+    WebApp.showAlert(`Закладка "${bookmarkName}" удалена!`);
 }
 
 function updateBookmarks() {
     const list = document.getElementById('bookmarksMenu');
     if (!list) return;
     list.innerHTML = '';
-    const currentBookmarks = bookmarks.filter(bm => bm.book === currentBook);
-    if (currentBookmarks.length === 0) {
+    if (bookmarks.length === 0) {
         const empty = document.createElement('div');
         empty.textContent = 'Нет закладок';
-        empty.style.padding = '5px';
+        empty.style.padding = '8px';
         empty.style.color = 'inherit';
+        empty.style.opacity = '0.7';
         list.appendChild(empty);
-    } else {
-        currentBookmarks.forEach((bm, index) => {
+        return;
+    }
+    bookmarks.forEach((bm, index) => {
+        if (bm.book === currentBook) {
             const div = document.createElement('div');
             div.className = 'bookmark';
             const text = document.createElement('span');
             text.textContent = `📖 ${bm.name}`;
+            text.title = bm.name;
             text.onclick = () => {
                 const content = document.getElementById('bookContent');
                 if (content) {
                     content.scrollTop = bm.scrollPos;
                     saveSettings();
                     closeBookmarksMenu();
+                    closeMenu();
                 }
             };
             const deleteBtn = document.createElement('span');
@@ -530,8 +580,8 @@ function updateBookmarks() {
             div.appendChild(text);
             div.appendChild(deleteBtn);
             list.appendChild(div);
-        });
-    }
+        }
+    });
 }
 
 const urlParams = new URLSearchParams(window.location.search);
