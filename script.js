@@ -167,15 +167,40 @@ async function updateContent() {
     }
     content.innerHTML = '';
     const lines = books[currentBook].split('\n');
+    let currentParagraph = null;
+    let lineIndex = 0;
+
     lines.forEach((line, index) => {
-        const span = document.createElement('span');
-        span.textContent = line;
-        span.id = `line-${index}`;
-        span.style.display = 'block';
-        content.appendChild(span);
-        const br = document.createElement('br');
-        content.appendChild(br);
+        line = line.trim();
+        if (line.startsWith('# Глава')) {
+            if (currentParagraph && currentParagraph.textContent.trim()) {
+                content.appendChild(currentParagraph);
+            }
+            const heading = document.createElement('h2');
+            heading.textContent = line.replace(/^#\s*/, '');
+            heading.id = `line-${index}`;
+            content.appendChild(heading);
+            currentParagraph = null;
+            lineIndex = index;
+        } else if (line === '') {
+            if (currentParagraph && currentParagraph.textContent.trim()) {
+                content.appendChild(currentParagraph);
+            }
+            currentParagraph = null;
+        } else {
+            if (!currentParagraph) {
+                currentParagraph = document.createElement('p');
+                currentParagraph.id = `line-${index}`;
+                lineIndex = index;
+            }
+            currentParagraph.textContent += (currentParagraph.textContent ? ' ' : '') + line;
+        }
     });
+
+    if (currentParagraph && currentParagraph.textContent.trim()) {
+        content.appendChild(currentParagraph);
+    }
+
     updateChapters();
     content.addEventListener('scroll', saveSettings, { once: true });
 }
@@ -221,7 +246,7 @@ function updateChapters() {
             const lineNum = parseInt(chapterSelect.value);
             console.log('Attempting to scroll to line:', lineNum);
             const target = document.getElementById(`line-${lineNum}`);
-            const spans = content.querySelectorAll('span[id^="line-"]');
+            const spans = content.querySelectorAll('[id^="line-"]');
             spans.forEach(span => {
                 span.style.fontWeight = 'normal';
                 span.style.background = 'none';
