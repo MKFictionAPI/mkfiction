@@ -1,24 +1,24 @@
 const books = {
-    book1: null,
-    book2: null,
-    book3: null,
-    book4: null,
-    book5: null,
-    book6: null,
-    book7: null,
-    book8: null,
-    book9: null,
-    book10: null,
-    book11: null,
-    book12: null,
-    book13: null,
-    book14: null,
-    book15: null,
-    book16: null,
-    book17: null,
-    book18: null,
-    book19: null,
-    book20: null
+    1: null,
+    2: null,
+    3: null,
+    4: null,
+    5: null,
+    6: null,
+    7: null,
+    8: null,
+    9: null,
+    10: null,
+    11: null,
+    12: null,
+    13: null,
+    14: null,
+    15: null,
+    16: null,
+    17: null,
+    18: null,
+    19: null,
+    20: null
 };
 let currentBook = '';
 let bookmarks = [];
@@ -45,7 +45,7 @@ function loadSettings() {
         currentBook = settings.book || '';
         bookmarks = settings.bookmarks || [];
         if (currentBook && books[currentBook] !== undefined) {
-            const bookSelect = document.getElementById('bookSelect');
+            const bookSelect = document.getElementById('bookSelectWelcome');
             if (bookSelect) bookSelect.value = currentBook;
             showReader();
             updateContent().then(() => {
@@ -133,8 +133,6 @@ function startReading() {
     const select = document.getElementById('bookSelectWelcome');
     if (select && select.value) {
         currentBook = select.value;
-        const bookSelect = document.getElementById('bookSelect');
-        if (bookSelect) bookSelect.value = currentBook;
         showReader();
         saveSettings();
     } else {
@@ -157,9 +155,10 @@ async function updateContent() {
     }
     if (books[currentBook] === null) {
         try {
-            const response = await fetch(`books/${currentBook}.txt`);
-            if (!response.ok) throw new Error('Текст не найден');
-            books[currentBook] = await response.text();
+            const response = await fetch(`http://192.168.1.1:5000/get_book?book_id=${currentBook}`);
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+            books[currentBook] = data.content;
         } catch (error) {
             content.textContent = 'Ошибка загрузки текста...';
             chapterSelect.innerHTML = '<option value="" disabled selected>-- Выбери главу --</option>';
@@ -300,35 +299,35 @@ function loadCovers() {
     if (!coverContainer || !bookSelect) return;
 
     coverContainer.innerHTML = '';
-    const books = [
-        { id: 'book1', title: 'Тайник' },
-        { id: 'book2', title: 'Дорога к Тайнику. Часть 1' },
-        { id: 'book3', title: 'Дорога к Тайнику. Часть 2' },
-        { id: 'book4', title: 'Ключи к Тайнику' },
-        { id: 'book5', title: 'Тайник. Тыкулкас' },
-        { id: 'book6', title: 'Городской детектив. Часть 1. Тени прошлого' },
-        { id: 'book7', title: 'Городской детектив. Часть 2. Штопая сердца' },
-        { id: 'book8', title: 'Городской детектив. Часть 3. Смерть в отпечатках' },
-        { id: 'book9', title: 'Сломанный лёд' },
-        { id: 'book10', title: 'Сломанный лёд 2' },
-        { id: 'book11', title: 'Сломанный лёд 3' },
-        { id: 'book12', title: 'Сломанный лёд 4' },
-        { id: 'book13', title: 'Потерянные во времени' },
-        { id: 'book14', title: 'За дверью завтрашнего дня. Часть 1. Анамнез' },
-        { id: 'book15', title: 'За дверью завтрашнего дня. Часть 2. Диагноз' },
-        { id: 'book16', title: 'Мурцовка. Том 1' },
-        { id: 'book17', title: 'Зимний Эндшпиль' },
-        { id: 'book18', title: 'Созданная демоном. Книга первая. Васюганские болота' },
-        { id: 'book19', title: 'Простота вечности. Пробуждение' },
-        { id: 'book20', title: 'Ведьмина Кюля' }
+    const bookList = [
+        { id: '1', title: 'Тайник' },
+        { id: '2', title: 'Дорога к Тайнику. Часть 1' },
+        { id: '3', title: 'Дорога к Тайнику. Часть 2' },
+        { id: '4', title: 'Ключи к Тайнику' },
+        { id: '5', title: 'Тайник. Тыкулкас' },
+        { id: '6', title: 'Городской детектив. Часть 1. Тени прошлого' },
+        { id: '7', title: 'Городской детектив. Часть 2. Штопая сердца' },
+        { id: '8', title: 'Городской детектив. Часть 3. Смерть в отпечатках' },
+        { id: '9', title: 'Сломанный лёд' },
+        { id: '10', title: 'Сломанный лёд 2' },
+        { id: '11', title: 'Сломанный лёд 3' },
+        { id: '12', title: 'Сломанный лёд 4' },
+        { id: '13', title: 'Потерянные во времени' },
+        { id: '14', title: 'За дверью завтрашнего дня. Часть 1. Анамнез' },
+        { id: '15', title: 'За дверью завтрашнего дня. Часть 2. Диагноз' },
+        { id: '16', title: 'Мурцовка. Том 1' },
+        { id: '17', title: 'Зимний Эндшпиль' },
+        { id: '18', title: 'Созданная демоном. Книга первая. Васюганские болота' },
+        { id: '19', title: 'Простота вечности. Пробуждение' },
+        { id: '20', title: 'Ведьмина Кюля' }
     ];
 
-    books.forEach(book => {
+    bookList.forEach(book => {
         const coverItem = document.createElement('div');
         coverItem.className = 'cover-item';
         coverItem.dataset.bookId = book.id;
         const img = document.createElement('img');
-        img.src = `covers/${book.id}.jpg`;
+        img.src = `covers/book${book.id}.jpg`;
         img.alt = book.title;
         img.title = book.title;
         coverItem.appendChild(img);
@@ -350,7 +349,7 @@ function loadCovers() {
     });
 }
 
-const bookSelect = document.getElementById('bookSelect');
+const bookSelect = document.getElementById('bookSelectWelcome');
 if (bookSelect) {
     bookSelect.addEventListener('change', function() {
         if (this.value) {
@@ -458,8 +457,7 @@ function toggleFullscreen() {
     const readerPage = document.getElementById('readerPage');
     const header = document.querySelector('#readerPage h1');
     const chaptersControls = document.querySelector('.chapters-controls');
-    const bookControls = document.querySelector('#readerPage .controls');
-    if (!content || !fullscreenBtn || !readerPage || !header || !chaptersControls || !bookControls) {
+    if (!content || !fullscreenBtn || !readerPage || !header || !chaptersControls) {
         console.error('Fullscreen elements not found');
         return;
     }
@@ -469,7 +467,6 @@ function toggleFullscreen() {
         readerPage.classList.remove('fullscreen-mode');
         header.style.display = 'block';
         chaptersControls.style.display = 'block';
-        bookControls.style.display = 'flex';
         console.log('Exited fullscreen');
     } else {
         content.classList.add('fullscreen');
@@ -477,7 +474,6 @@ function toggleFullscreen() {
         readerPage.classList.add('fullscreen-mode');
         header.style.display = 'none';
         chaptersControls.style.display = 'none';
-        bookControls.style.display = 'none';
         closeMenu();
         console.log('Entered fullscreen');
     }
@@ -490,14 +486,12 @@ function exitFullscreen() {
     const readerPage = document.getElementById('readerPage');
     const header = document.querySelector('#readerPage h1');
     const chaptersControls = document.querySelector('.chapters-controls');
-    const bookControls = document.querySelector('#readerPage .controls');
     if (content && content.classList.contains('fullscreen')) {
         content.classList.remove('fullscreen');
         if (fullscreenBtn) fullscreenBtn.textContent = 'На весь экран';
         if (readerPage) readerPage.classList.remove('fullscreen-mode');
         if (header) header.style.display = 'block';
         if (chaptersControls) chaptersControls.style.display = 'block';
-        if (bookControls) bookControls.style.display = 'flex';
         console.log('Forced exit fullscreen');
         saveSettings();
     }
@@ -599,11 +593,12 @@ function updateBookmarks() {
     });
 }
 
+// Загружаем книгу из URL, если есть book_id
 const urlParams = new URLSearchParams(window.location.search);
-const bookFromUrl = urlParams.get('book');
+const bookFromUrl = urlParams.get('book_id');
 if (bookFromUrl && books[bookFromUrl] !== undefined) {
     currentBook = bookFromUrl;
-    const bookSelect = document.getElementById('bookSelect');
+    const bookSelect = document.getElementById('bookSelectWelcome');
     if (bookSelect) bookSelect.value = currentBook;
     showReader();
 } else {
