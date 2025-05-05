@@ -155,7 +155,7 @@ async function updateContent() {
     }
     if (books[currentBook] === null) {
         try {
-            const response = await fetch(`http://91.197.98.28:5000/get_book?book_id=${currentBook}`);
+            const response = await fetch(`https://cors-anywhere.herokuapp.com/http://91.197.98.28:5000/get_book?book_id=${currentBook}`);
             const data = await response.json();
             if (data.error) throw new Error(data.error);
             books[currentBook] = data.content;
