@@ -1,6 +1,6 @@
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 
-     // Список книг для удобства
+     // Список книг
      const books = {
          book1: { title: "Тайник", file: "books/book1.txt" },
          book2: { title: "Дорога к Тайнику. Часть 1", file: "books/book2.txt" },
@@ -36,14 +36,16 @@ let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 
      async function loadBook(bookId) {
          const bookContent = document.getElementById('bookContent');
+         bookContent.textContent = 'Загрузка книги...';
          try {
              const response = await fetch(books[bookId].file);
-             if (!response.ok) throw new Error('Файл не найден');
+             if (!response.ok) throw new Error(`Файл ${books[bookId].file} не найден`);
              const text = await response.text();
-             bookContent.textContent = text;
+             bookContent.textContent = text || 'Книга пуста';
              updateChapterSelect(bookId, text);
          } catch (error) {
-             bookContent.textContent = 'Ошибка загрузки книги. Проверьте наличие файла.';
+             bookContent.textContent = `Ошибка загрузки книги: ${error.message}. Проверьте наличие файла ${books[bookId].file}.`;
+             console.error(error);
          }
      }
 
@@ -73,8 +75,7 @@ let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
              const chapters = document.getElementById('bookContent').textContent.split('\n\n');
              const chapterElement = document.createElement('div');
              chapterElement.textContent = chapters[index];
-             const position = chapterElement.offsetTop;
-             document.getElementById('bookContent').scrollTop = position;
+             document.getElementById('bookContent').scrollIntoView({ behavior: 'smooth' });
          }
      });
 
