@@ -28,7 +28,7 @@
          const bookId = document.getElementById('bookSelectWelcome').value;
          if (bookId) {
              document.getElementById('welcomePage').style.display = 'none';
-             document.getElementById('readerPage').style.display = 'contents';
+             document.getElementById('readerPage').style.display = 'block';
              document.getElementById('bookSelect').value = bookId;
              loadBook(bookId);
          }
@@ -50,21 +50,24 @@
                  option.value = index;
                  option.textContent = chapter.split('\n')[0];
                  chapterSelect.appendChild(option);
-             });
+             }
          });
      }
 
      document.getElementById('bookSelect').addEventListener('change', () => {
          const bookId = document.getElementById('bookSelect').value;
-         loadBook(bookId(bookId);
+         loadBook(bookId);
      });
 
      document.getElementById('chapterSelect').addEventListener('change', () => {
-         const index = chapterSelect.getElementById('chapterSelect').value;
+         const chapterSelect = document.getElementById('chapterSelect');
+         const index = chapterSelect.value;
          if (index) {
              const chapters = document.getElementById('bookContent').textContent.split('\n\n');
-             const position = chapters[index].offsetTop;
-             document.getElementById('bookContent').scrollTop(position);
+             const chapterElement = document.createElement('div');
+             chapterElement.textContent = chapters[index];
+             const position = chapterElement.offsetTop;
+             document.getElementById('bookContent').scrollTop = position;
          }
      });
 
@@ -104,7 +107,17 @@
 
      function backToWelcome() {
          document.getElementById('readerPage').style.display = 'none';
-         document.getElementById('welcomePage').style.display = 'contents';
+         document.getElementById('welcomePage').style.display = 'block';
      }
+
+     // Обработчик кликов по обложкам
+     document.querySelectorAll('.cover').forEach(cover => {
+         cover.addEventListener('click', () => {
+             const bookId = cover.getAttribute('data-book-id');
+             document.getElementById('bookSelectWelcome').value = bookId;
+             startReading();
+         });
+     });
+
      // Инициализация
      document.getElementById('bookSelectWelcome').value = '';
