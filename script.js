@@ -153,3 +153,10 @@ let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 
    // Инициализация
    document.getElementById('bookSelectWelcome').value = '';
+
+// Обработчик слайдера шрифта
+document.getElementById('fontSize').addEventListener('input', (e) => {
+    const fontSize = e.target.value + 'px';
+    document.getElementById('bookContent').style.fontSize = fontSize;
+    document.getElementById('fontSizeValue').textContent = e.target.value;
+});
