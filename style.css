@@ -99,3 +99,29 @@ body {
      .dark .cover span {
          color: #bbb;
      }
+     .paid-button {
+         display: block;
+         margin: 20px auto;
+         padding: 15px 30px;
+         background-color: #0088cc; /* Синий цвет ТГ */
+         color: white;
+         border: none;
+         border-radius: 25px;
+         font-size: 18px;
+         cursor: pointer;
+         font-family: 'Cinzel', serif;
+     }
+     .paid-button:hover {
+         background-color: #006699;
+     }
+     .dark .paid-button {
+         background-color: #006699;
+     }
+     .dark .paid-button:hover {
+         background-color: #004466;
+     }
+     pre {
+         margin: 0;
+         font-family: 'Cinzel', serif;
+         line-height: 1.6;
+     }
