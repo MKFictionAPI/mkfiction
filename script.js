@@ -1,5 +1,4 @@
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
 // Список книг
 const books = {
@@ -40,12 +39,13 @@ function startReading() {
 
 async function loadBook(bookId) {
     const bookContent = document.getElementById('bookContent');
-    bookContent.innerHTML = '<p>Загрузка книги...</p>';
+    bookContent.classList.add('flip-animation'); // Запуск flip-анимации
+    bookContent.innerHTML = '<div class="bookContent"><p>Загрузка книги...</p></div>';
     try {
         const response = await fetch(books[bookId].file);
         if (!response.ok) throw new Error(`Файл ${books[bookId].file} не найден`);
         const text = await response.text();
-        bookContent.innerHTML = `<pre style="white-space: pre-wrap;" id="textContent">${text}</pre>`; // ID для typewriter
+        bookContent.innerHTML = `<div class="bookContent"><pre style="white-space: pre-wrap;">${text}</pre></div>`;
         // Добавляем кнопку в конце отрывка
         const button = document.createElement('button');
         button.innerHTML = '<i class="fas fa-crown"></i> Подписаться на полный текст';
@@ -54,9 +54,9 @@ async function loadBook(bookId) {
         bookContent.appendChild(button);
         updateChapterSelect(bookId, text);
         initProgressBar();
-        typewriterEffect(); // Typewriter анимация для текста
+        setTimeout(() => bookContent.classList.remove('flip-animation'), 1000); // Убираем анимацию после
     } catch (error) {
-        bookContent.innerHTML = `<p>Ошибка загрузки книги: ${error.message}. Проверьте наличие файла ${books[bookId].file}.</p>`;
+        bookContent.innerHTML = `<div class="bookContent"><p>Ошибка загрузки книги: ${error.message}. Проверьте наличие файла ${books[bookId].file}.</p></div>`;
         console.error(error);
     }
 }
@@ -141,12 +141,10 @@ function backToWelcome() {
 // Обработчик кликов по обложкам
 document.querySelectorAll('.cover').forEach((cover, index) => {
     cover.style.setProperty('--n', index);
-    cover.addEventListener('click', (e) => {
-        if (e.target.tagName !== 'I') { // Не клик по звезде
-            const bookId = cover.getAttribute('data-book-id');
-            document.getElementById('bookSelectWelcome').value = bookId;
-            startReading();
-        }
+    cover.addEventListener('click', () => {
+        const bookId = cover.getAttribute('data-book-id');
+        document.getElementById('bookSelectWelcome').value = bookId;
+        startReading();
     });
 });
 
@@ -183,94 +181,5 @@ function initProgressBar() {
     });
 }
 
-// Typewriter эффект для текста
-function typewriterEffect() {
-    const textElement = document.getElementById('textContent');
-    const fullText = textElement.textContent;
-    textElement.textContent = '';
-    let i = 0;
-    const timer = setInterval(() => {
-        if (i < fullText.length) {
-            textElement.textContent += fullText.charAt(i);
-            i++;
-        } else {
-            clearInterval(timer);
-        }
-    }, 20); // Скорость печати
-}
-
-// Поиск по книгам
-document.getElementById('searchInput').addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    const covers = document.querySelectorAll('.cover');
-    covers.forEach(cover => {
-        const title = cover.querySelector('span').textContent.toLowerCase();
-        if (title.includes(query)) {
-            cover.style.display = 'block';
-        } else {
-            cover.style.display = 'none';
-        }
-    });
-});
-
-// Случайная книга
-function randomBook() {
-    const bookIds = Object.keys(books);
-    const randomId = bookIds[Math.floor(Math.random() * bookIds.length)];
-    document.getElementById('bookSelectWelcome').value = randomId;
-    startReading();
-    // Анимация спин
-    document.querySelector('.covers-grid').style.transform = 'rotate(360deg)';
-    setTimeout(() => {
-        document.querySelector('.covers-grid').style.transform = 'rotate(0deg)';
-    }, 500);
-}
-
-// Избранное
-function toggleFavorite(e, bookId) {
-    e.stopPropagation(); // Не клик по обложке
-    const star = e.target;
-    if (favorites.includes(bookId)) {
-        favorites = favorites.filter(id => id !== bookId);
-        star.classList.remove('fas');
-        star.classList.add('far');
-    } else {
-        favorites.push(bookId);
-        star.classList.remove('far');
-        star.classList.add('fas');
-    }
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    renderFavorites();
-}
-
-// Рендер избранного
-function renderFavorites() {
-    const favoritesGrid = document.getElementById('favoritesGrid');
-    favoritesGrid.innerHTML = '';
-    favorites.forEach(bookId => {
-        const cover = document.querySelector(`[data-book-id="${bookId}"]`).cloneNode(true);
-        cover.querySelector('i').classList.remove('far', 'fas'); // Убираем звезду для избранного
-        cover.querySelector('i').outerHTML = ''; // Или просто удаляем
-        favoritesGrid.appendChild(cover);
-        cover.onclick = () => {
-            document.getElementById('bookSelectWelcome').value = bookId;
-            startReading();
-        };
-    });
-    if (favorites.length === 0) {
-        favoritesGrid.innerHTML = '<p style="text-align: center; color: #999;">Нет избранных книг</p>';
-    }
-}
-
 // Инициализация
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.cover i').forEach(star => {
-        const bookId = star.parentElement.parentElement.getAttribute('data-book-id');
-        if (favorites.includes(bookId)) {
-            star.classList.add('fas');
-            star.classList.remove('far');
-        }
-    });
-    renderFavorites();
-    document.getElementById('bookSelectWelcome').value = '';
-});
+document.getElementById('bookSelectWelcome').value = '';
