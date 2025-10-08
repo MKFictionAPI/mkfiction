@@ -141,7 +141,7 @@ body {
        border-radius: 10px;
        overflow: hidden;
        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-       height: auto; /* Адаптивная высота */
+       height: auto; /* Полная адаптация */
    }
    .cover:hover {
        transform: scale(1.05);
@@ -149,8 +149,8 @@ body {
    }
    .cover img {
        width: 100%;
-       height: auto; /* Автоматическая высота по содержимому */
-       object-fit: contain; /* Показывает целиком, без обрезки */
+       height: auto; /* Автоматическая высота, без ограничений */
+       object-fit: scale-down; /* Уменьшает, если большая, но всегда целиком */
        object-position: center;
        display: block;
    }
@@ -228,15 +228,17 @@ body {
            width: 100%;
        }
        .covers-grid {
-           grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+           grid-template-columns: repeat(2, 1fr); /* Фиксированные 2 колонки на мобилке */
            gap: 10px;
+           justify-items: center;
        }
        .cover {
            height: auto;
+           width: 100%; /* Полная ширина в колонке */
        }
        .cover img {
-           height: auto;
-           max-height: 140px; /* Ограничение для компактности на мобилке */
+           height: auto; /* Без ограничений */
+           object-fit: scale-down;
        }
        .cover span {
            font-size: 10px;
@@ -266,22 +268,24 @@ body {
    }
    @media (max-width: 480px) {
        .covers-grid {
-           grid-template-columns: 1fr 1fr;
+           grid-template-columns: 1fr; /* 1 колонка на очень маленьких экранах */
+           gap: 15px;
+       }
+       .cover {
+           width: 80%; /* Центрируем и сжимаем */
+           margin: 0 auto;
+       }
+       .cover img {
+           height: auto;
+           object-fit: scale-down;
+       }
+       .cover span {
+           font-size: 9px;
        }
        h1 {
            font-size: 20px;
        }
        .controls label {
            font-size: 12px;
-       }
-       .cover {
-           height: auto;
-       }
-       .cover img {
-           height: auto;
-           max-height: 120px; /* Ещё меньше на очень маленьких экранах */
-       }
-       .cover span {
-           font-size: 9px;
        }
    }
