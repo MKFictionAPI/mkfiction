@@ -1,109 +1,114 @@
 <!DOCTYPE html>
-   <html lang="ru">
-   <head>
-       <meta charset="UTF-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>Писатель Мария Карташева</title>
-       <link rel="stylesheet" href="style.css">
-       <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-   </head>
-   <body>
-       <div class="container">
-           <div id="welcomePage">
-               <h1>Писатель Мария Карташева</h1>
-               <img src="author.webp" alt="Мария Карташева" class="author-photo">
-               <p>Добро пожаловать в мир историй Марии Карташевой! Здесь ждут тайны, тени и приключения. Выбери книгу и погрузись в чтение!</p>
-               <div class="covers-grid">
-                   <div class="cover" data-book-id="book1"><img src="covers/book1.jpg" alt="Тайник"><span>Тайник</span></div>
-                   <div class="cover" data-book-id="book2"><img src="covers/book2.jpg" alt="Дорога к Тайнику. Часть 1"><span>Дорога к Тайнику. Часть 1</span></div>
-                   <div class="cover" data-book-id="book3"><img src="covers/book3.jpg" alt="Дорога к Тайнику. Часть 2"><span>Дорога к Тайнику. Часть 2</span></div>
-                   <div class="cover" data-book-id="book4"><img src="covers/book4.jpg" alt="Ключи к Тайнику"><span>Ключи к Тайнику</span></div>
-                   <div class="cover" data-book-id="book5"><img src="covers/book5.jpg" alt="Тайник. Тыкулкас"><span>Тайник. Тыкулкас</span></div>
-                   <div class="cover" data-book-id="book6"><img src="covers/book6.jpg" alt="Городской детектив. Часть 1"><span>Городской детектив. Часть 1</span></div>
-                   <div class="cover" data-book-id="book7"><img src="covers/book7.jpg" alt="Городской детектив. Часть 2"><span>Городской детектив. Часть 2</span></div>
-                   <div class="cover" data-book-id="book8"><img src="covers/book8.jpg" alt="Городской детектив. Часть 3"><span>Городской детектив. Часть 3</span></div>
-                   <div class="cover" data-book-id="book9"><img src="covers/book9.jpg" alt="Сломанный лёд"><span>Сломанный лёд</span></div>
-                   <div class="cover" data-book-id="book10"><img src="covers/book10.jpg" alt="Сломанный лёд 2"><span>Сломанный лёд 2</span></div>
-                   <div class="cover" data-book-id="book11"><img src="covers/book11.jpg" alt="Сломанный лёд 3"><span>Сломанный лёд 3</span></div>
-                   <div class="cover" data-book-id="book12"><img src="covers/book12.jpg" alt="Сломанный лёд 4"><span>Сломанный лёд 4</span></div>
-                   <div class="cover" data-book-id="book13"><img src="covers/book13.jpg" alt="Потерянные во времени"><span>Потерянные во времени</span></div>
-                   <div class="cover" data-book-id="book14"><img src="covers/book14.jpg" alt="За дверью завтрашнего дня. Часть 1"><span>За дверью завтрашнего дня. Часть 1</span></div>
-                   <div class="cover" data-book-id="book15"><img src="covers/book15.jpg" alt="За дверью завтрашнего дня. Часть 2"><span>За дверью завтрашнего дня. Часть 2</span></div>
-                   <div class="cover" data-book-id="book16"><img src="covers/book16.jpg" alt="Мурцовка. Том 1"><span>Мурцовка. Том 1</span></div>
-                   <div class="cover" data-book-id="book17"><img src="covers/book17.jpg" alt="Зимний Эндшпиль"><span>Зимний Эндшпиль</span></div>
-                   <div class="cover" data-book-id="book18"><img src="covers/book18.jpg" alt="Созданная демоном"><span>Созданная демоном</span></div>
-                   <div class="cover" data-book-id="book19"><img src="covers/book19.jpg" alt="Простота вечности"><span>Простота вечности</span></div>
-                   <div class="cover" data-book-id="book20"><img src="covers/book20.jpg" alt="Ведьмина Кюля"><span>Ведьмина Кюля</span></div>
-               </div>
-               <select id="bookSelectWelcome">
-                   <option value="">-- Выбери книгу --</option>
-                   <option value="book1">Тайник</option>
-                   <option value="book2">Дорога к Тайнику. Часть 1</option>
-                   <option value="book3">Дорога к Тайнику. Часть 2</option>
-                   <option value="book4">Ключи к Тайнику</option>
-                   <option value="book5">Тайник. Тыкулкас</option>
-                   <option value="book6">Городской детектив. Часть 1. Тени прошлого</option>
-                   <option value="book7">Городской детектив. Часть 2. Штопая сердца</option>
-                   <option value="book8">Городской детектив. Часть 3. Смерть в отпечатках</option>
-                   <option value="book9">Сломанный лёд</option>
-                   <option value="book10">Сломанный лёд 2</option>
-                   <option value="book11">Сломанный лёд 3</option>
-                   <option value="book12">Сломанный лёд 4</option>
-                   <option value="book13">Потерянные во времени</option>
-                   <option value="book14">За дверью завтрашнего дня. Часть 1. Анамнез</option>
-                   <option value="book15">За дверью завтрашнего дня. Часть 2. Диагноз</option>
-                   <option value="book16">Мурцовка. Том 1</option>
-                   <option value="book17">Зимний Эндшпиль</option>
-                   <option value="book18">Созданная демоном. Книга первая. Васюганские болота</option>
-                   <option value="book19">Простота вечности. Пробуждение</option>
-                   <option value="book20">Ведьмина Кюля</option>
-               </select>
-               <button onclick="startReading()">Читать</button>
-           </div>
-           <div id="readerPage" style="display: none;">
-               <h1>Писатель Мария Карташева</h1>
-               <div class="controls">
-                   <select id="bookSelect">
-                       <option value="book1">Тайник</option>
-                       <option value="book2">Дорога к Тайнику. Часть 1</option>
-                       <option value="book3">Дорога к Тайнику. Часть 2</option>
-                       <option value="book4">Ключи к Тайнику</option>
-                       <option value="book5">Тайник. Тыкулкас</option>
-                       <option value="book6">Городской детектив. Часть 1. Тени прошлого</option>
-                       <option value="book7">Городской детектив. Часть 2. Штопая сердца</option>
-                       <option value="book8">Городской детектив. Часть 3. Смерть в отпечатках</option>
-                       <option value="book9">Сломанный лёд</option>
-                       <option value="book10">Сломанный лёд 2</option>
-                       <option value="book11">Сломанный лёд 3</option>
-                       <option value="book12">Сломанный лёд 4</option>
-                       <option value="book13">Потерянные во времени</option>
-                       <option value="book14">За дверью завтрашнего дня. Часть 1. Анамнез</option>
-                       <option value="book15">За дверью завтрашнего дня. Часть 2. Диагноз</option>
-                       <option value="book16">Мурцовка. Том 1</option>
-                       <option value="book17">Зимний Эндшпиль</option>
-                       <option value="book18">Созданная демоном. Книга первая. Васюганские болота</option>
-                       <option value="book19">Простота вечности. Пробуждение</option>
-                       <option value="book20">Ведьмина Кюля</option>
-                   </select>
-                   <select id="themeSelect">
-                       <option value="light">☀️ Светлая</option>
-                       <option value="dark">🖤 Тёмная</option>
-                   </select>
-                   <label for="fontSize">Шрифт: <span id="fontSizeValue">16</span>px</label>
-                   <input type="range" id="fontSize" min="12" max="24" value="16" step="2">
-               </div>
-               <div id="bookContent"></div>
-               <div class="reader-controls">
-                   <select id="chapterSelect">
-                       <option value="">-- Выбери главу --</option>
-                   </select>
-                   <button onclick="addBookmark()">📍 Закладка</button>
-                   <button onclick="showBookmarks()">🔖 Закладки</button>
-                   <button onclick="backToWelcome()">🏠 Главная</button>
-               </div>
-               <div id="bookmarksList"></div>
-           </div>
-       </div>
-       <script src="script.js"></script>
-   </body>
-   </html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Писатель Мария Карташева</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div id="welcomePage">
+            <h1>Писатель Мария Карташева</h1>
+            <img src="author.webp" alt="Мария Карташева" class="author-photo">
+            <p>Добро пожаловать в мир историй Марии Карташевой! Здесь ждут тайны, тени и приключения. Выбери книгу и погрузись в чтение!</p>
+            <div class="covers-grid">
+                <div class="cover" data-book-id="book1"><img src="covers/book1.jpg" alt="Тайник"><span>Тайник</span></div>
+                <div class="cover" data-book-id="book2"><img src="covers/book2.jpg" alt="Дорога к Тайнику. Часть 1"><span>Дорога к Тайнику. Часть 1</span></div>
+                <div class="cover" data-book-id="book3"><img src="covers/book3.jpg" alt="Дорога к Тайнику. Часть 2"><span>Дорога к Тайнику. Часть 2</span></div>
+                <div class="cover" data-book-id="book4"><img src="covers/book4.jpg" alt="Ключи к Тайнику"><span>Ключи к Тайнику</span></div>
+                <div class="cover" data-book-id="book5"><img src="covers/book5.jpg" alt="Тайник. Тыкулкас"><span>Тайник. Тыкулкас</span></div>
+                <div class="cover" data-book-id="book6"><img src="covers/book6.jpg" alt="Городской детектив. Часть 1"><span>Городской детектив. Часть 1</span></div>
+                <div class="cover" data-book-id="book7"><img src="covers/book7.jpg" alt="Городской детектив. Часть 2"><span>Городской детектив. Часть 2</span></div>
+                <div class="cover" data-book-id="book8"><img src="covers/book8.jpg" alt="Городской детектив. Часть 3"><span>Городской детектив. Часть 3</span></div>
+                <div class="cover" data-book-id="book9"><img src="covers/book9.jpg" alt="Сломанный лёд"><span>Сломанный лёд</span></div>
+                <div class="cover" data-book-id="book10"><img src="covers/book10.jpg" alt="Сломанный лёд 2"><span>Сломанный лёд 2</span></div>
+                <div class="cover" data-book-id="book11"><img src="covers/book11.jpg" alt="Сломанный лёд 3"><span>Сломанный лёд 3</span></div>
+                <div class="cover" data-book-id="book12"><img src="covers/book12.jpg" alt="Сломанный лёд 4"><span>Сломанный лёд 4</span></div>
+                <div class="cover" data-book-id="book13"><img src="covers/book13.jpg" alt="Потерянные во времени"><span>Потерянные во времени</span></div>
+                <div class="cover" data-book-id="book14"><img src="covers/book14.jpg" alt="За дверью завтрашнего дня. Часть 1"><span>За дверью завтрашнего дня. Часть 1</span></div>
+                <div class="cover" data-book-id="book15"><img src="covers/book15.jpg" alt="За дверью завтрашнего дня. Часть 2"><span>За дверью завтрашнего дня. Часть 2</span></div>
+                <div class="cover" data-book-id="book16"><img src="covers/book16.jpg" alt="Мурцовка. Том 1"><span>Мурцовка. Том 1</span></div>
+                <div class="cover" data-book-id="book17"><img src="covers/book17.jpg" alt="Зимний Эндшпиль"><span>Зимний Эндшпиль</span></div>
+                <div class="cover" data-book-id="book18"><img src="covers/book18.jpg" alt="Созданная демоном"><span>Созданная демоном</span></div>
+                <div class="cover" data-book-id="book19"><img src="covers/book19.jpg" alt="Простота вечности"><span>Простота вечности</span></div>
+                <div class="cover" data-book-id="book20"><img src="covers/book20.jpg" alt="Ведьмина Кюля"><span>Ведьмина Кюля</span></div>
+            </div>
+            <select id="bookSelectWelcome">
+                <option value="">-- Выбери книгу --</option>
+                <option value="book1">Тайник</option>
+                <option value="book2">Дорога к Тайнику. Часть 1</option>
+                <option value="book3">Дорога к Тайнику. Часть 2</option>
+                <option value="book4">Ключи к Тайнику</option>
+                <option value="book5">Тайник. Тыкулкас</option>
+                <option value="book6">Городской детектив. Часть 1. Тени прошлого</option>
+                <option value="book7">Городской детектив. Часть 2. Штопая сердца</option>
+                <option value="book8">Городской детектив. Часть 3. Смерть в отпечатках</option>
+                <option value="book9">Сломанный лёд</option>
+                <option value="book10">Сломанный лёд 2</option>
+                <option value="book11">Сломанный лёд 3</option>
+                <option value="book12">Сломанный лёд 4</option>
+                <option value="book13">Потерянные во времени</option>
+                <option value="book14">За дверью завтрашнего дня. Часть 1. Анамнез</option>
+                <option value="book15">За дверью завтрашнего дня. Часть 2. Диагноз</option>
+                <option value="book16">Мурцовка. Том 1</option>
+                <option value="book17">Зимний Эндшпиль</option>
+                <option value="book18">Созданная демоном. Книга первая. Васюганские болота</option>
+                <option value="book19">Простота вечности. Пробуждение</option>
+                <option value="book20">Ведьмина Кюля</option>
+            </select>
+            <button onclick="startReading()"><i class="fas fa-book-open"></i> Читать</button>
+        </div>
+        <div id="readerPage" style="display: none;">
+            <h1>Писатель Мария Карташева</h1>
+            <div class="controls">
+                <select id="bookSelect">
+                    <option value="book1">Тайник</option>
+                    <option value="book2">Дорога к Тайнику. Часть 1</option>
+                    <option value="book3">Дорога к Тайнику. Часть 2</option>
+                    <option value="book4">Ключи к Тайнику</option>
+                    <option value="book5">Тайник. Тыкулкас</option>
+                    <option value="book6">Городской детектив. Часть 1. Тени прошлого</option>
+                    <option value="book7">Городской детектив. Часть 2. Штопая сердца</option>
+                    <option value="book8">Городской детектив. Часть 3. Смерть в отпечатках</option>
+                    <option value="book9">Сломанный лёд</option>
+                    <option value="book10">Сломанный лёд 2</option>
+                    <option value="book11">Сломанный лёд 3</option>
+                    <option value="book12">Сломанный лёд 4</option>
+                    <option value="book13">Потерянные во времени</option>
+                    <option value="book14">За дверью завтрашнего дня. Часть 1. Анамнез</option>
+                    <option value="book15">За дверью завтрашнего дня. Часть 2. Диагноз</option>
+                    <option value="book16">Мурцовка. Том 1</option>
+                    <option value="book17">Зимний Эндшпиль</option>
+                    <option value="book18">Созданная демоном. Книга первая. Васюганские болота</option>
+                    <option value="book19">Простота вечности. Пробуждение</option>
+                    <option value="book20">Ведьмина Кюля</option>
+                </select>
+                <select id="themeSelect">
+                    <option value="light">☀️ Светлая</option>
+                    <option value="dark">🖤 Тёмная</option>
+                </select>
+                <label for="fontSize"><i class="fas fa-font"></i> Шрифт: <span id="fontSizeValue">16</span>px</label>
+                <input type="range" id="fontSize" min="12" max="24" value="16" step="2">
+            </div>
+            <div id="bookContent">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            <div class="reader-controls">
+                <select id="chapterSelect">
+                    <option value="">-- Выбери главу --</option>
+                </select>
+                <button onclick="addBookmark()"><i class="fas fa-bookmark"></i> Закладка</button>
+                <button onclick="showBookmarks()"><i class="fas fa-list"></i> Закладки</button>
+                <button onclick="backToWelcome()"><i class="fas fa-home"></i> Главная</button>
+            </div>
+            <div id="bookmarksList"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
