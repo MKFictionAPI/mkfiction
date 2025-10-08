@@ -11,8 +11,7 @@
        <div class="container">
            <div id="welcomePage">
                <h1>Писатель Мария Карташева</h1>
-               <!-- Если есть author.webp, раскомментируй строку ниже -->
-               <!-- <img src="author.webp" alt="Мария Карташева" class="author-photo"> -->
+               <img src="author.webp" alt="Мария Карташева" class="author-photo">
                <p>Добро пожаловать в мир историй Марии Карташевой! Здесь ждут тайны, тени и приключения. Выбери книгу и погрузись в чтение!</p>
                <div class="covers-grid">
                    <div class="cover" data-book-id="book1"><img src="covers/book1.jpg" alt="Тайник"><span>Тайник</span></div>
@@ -90,7 +89,7 @@
                        <option value="light">☀️ Светлая</option>
                        <option value="dark">🖤 Тёмная</option>
                    </select>
-                   <label for="fontSize">Размер шрифта: <span id="fontSizeValue">16</span>px</label>
+                   <label for="fontSize">Шрифт: <span id="fontSizeValue">16</span>px</label>
                    <input type="range" id="fontSize" min="12" max="24" value="16" step="2">
                </div>
                <div id="bookContent"></div>
@@ -98,9 +97,9 @@
                    <select id="chapterSelect">
                        <option value="">-- Выбери главу --</option>
                    </select>
-                   <button onclick="addBookmark()">📍 Добавить закладку</button>
-                   <button onclick="showBookmarks()">🔖 Показать закладки</button>
-                   <button onclick="backToWelcome()">🏠 На главную</button>
+                   <button onclick="addBookmark()">📍 Закладка</button>
+                   <button onclick="showBookmarks()">🔖 Закладки</button>
+                   <button onclick="backToWelcome()">🏠 Главная</button>
                </div>
                <div id="bookmarksList"></div>
            </div>
