@@ -1,4 +1,5 @@
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
 // Список книг
 const books = {
@@ -39,12 +40,12 @@ function startReading() {
 
 async function loadBook(bookId) {
     const bookContent = document.getElementById('bookContent');
-    bookContent.innerHTML = '<p>Загрузка книги...</p>'; // Используем innerHTML для кнопки
+    bookContent.innerHTML = '<p>Загрузка книги...</p>';
     try {
         const response = await fetch(books[bookId].file);
         if (!response.ok) throw new Error(`Файл ${books[bookId].file} не найден`);
         const text = await response.text();
-        bookContent.innerHTML = `<pre style="white-space: pre-wrap;">${text}</pre>`; // Текст как pre для форматирования
+        bookContent.innerHTML = `<pre style="white-space: pre-wrap;" id="textContent">${text}</pre>`; // ID для typewriter
         // Добавляем кнопку в конце отрывка
         const button = document.createElement('button');
         button.innerHTML = '<i class="fas fa-crown"></i> Подписаться на полный текст';
@@ -52,8 +53,8 @@ async function loadBook(bookId) {
         button.onclick = openPaidChannel;
         bookContent.appendChild(button);
         updateChapterSelect(bookId, text);
-        initProgressBar(); // Инициализация прогресса
-        fadeInContent(); // Анимация появления текста
+        initProgressBar();
+        typewriterEffect(); // Typewriter анимация для текста
     } catch (error) {
         bookContent.innerHTML = `<p>Ошибка загрузки книги: ${error.message}. Проверьте наличие файла ${books[bookId].file}.</p>`;
         console.error(error);
@@ -64,7 +65,6 @@ function openPaidChannel() {
     if (window.Telegram && Telegram.WebApp) {
         Telegram.WebApp.openTelegramLink(PAID_CHANNEL_URL);
     } else {
-        // Fallback для не-TG браузера
         window.open(PAID_CHANNEL_URL, '_blank');
     }
 }
@@ -141,20 +141,22 @@ function backToWelcome() {
 // Обработчик кликов по обложкам
 document.querySelectorAll('.cover').forEach((cover, index) => {
     cover.style.setProperty('--n', index);
-    cover.addEventListener('click', () => {
-        const bookId = cover.getAttribute('data-book-id');
-        document.getElementById('bookSelectWelcome').value = bookId;
-        startReading();
+    cover.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'I') { // Не клик по звезде
+            const bookId = cover.getAttribute('data-book-id');
+            document.getElementById('bookSelectWelcome').value = bookId;
+            startReading();
+        }
     });
 });
 
 // Инициализация TG Web App
 if (window.Telegram && Telegram.WebApp) {
     Telegram.WebApp.ready();
-    Telegram.WebApp.expand(); // Расширяем на весь экран
+    Telegram.WebApp.expand();
 }
 
-// Обработчик слайдера шрифта (с сохранением)
+// Обработчик слайдера шрифта
 const fontSlider = document.getElementById('fontSize');
 const fontValue = document.getElementById('fontSizeValue');
 const savedFontSize = localStorage.getItem('fontSize') || 16;
@@ -181,15 +183,94 @@ function initProgressBar() {
     });
 }
 
-// Анимация появления контента
-function fadeInContent() {
-    const bookContent = document.getElementById('bookContent');
-    bookContent.style.opacity = '0';
-    bookContent.style.transition = 'opacity 0.5s ease';
+// Typewriter эффект для текста
+function typewriterEffect() {
+    const textElement = document.getElementById('textContent');
+    const fullText = textElement.textContent;
+    textElement.textContent = '';
+    let i = 0;
+    const timer = setInterval(() => {
+        if (i < fullText.length) {
+            textElement.textContent += fullText.charAt(i);
+            i++;
+        } else {
+            clearInterval(timer);
+        }
+    }, 20); // Скорость печати
+}
+
+// Поиск по книгам
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    const covers = document.querySelectorAll('.cover');
+    covers.forEach(cover => {
+        const title = cover.querySelector('span').textContent.toLowerCase();
+        if (title.includes(query)) {
+            cover.style.display = 'block';
+        } else {
+            cover.style.display = 'none';
+        }
+    });
+});
+
+// Случайная книга
+function randomBook() {
+    const bookIds = Object.keys(books);
+    const randomId = bookIds[Math.floor(Math.random() * bookIds.length)];
+    document.getElementById('bookSelectWelcome').value = randomId;
+    startReading();
+    // Анимация спин
+    document.querySelector('.covers-grid').style.transform = 'rotate(360deg)';
     setTimeout(() => {
-        bookContent.style.opacity = '1';
-    }, 100);
+        document.querySelector('.covers-grid').style.transform = 'rotate(0deg)';
+    }, 500);
+}
+
+// Избранное
+function toggleFavorite(e, bookId) {
+    e.stopPropagation(); // Не клик по обложке
+    const star = e.target;
+    if (favorites.includes(bookId)) {
+        favorites = favorites.filter(id => id !== bookId);
+        star.classList.remove('fas');
+        star.classList.add('far');
+    } else {
+        favorites.push(bookId);
+        star.classList.remove('far');
+        star.classList.add('fas');
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    renderFavorites();
+}
+
+// Рендер избранного
+function renderFavorites() {
+    const favoritesGrid = document.getElementById('favoritesGrid');
+    favoritesGrid.innerHTML = '';
+    favorites.forEach(bookId => {
+        const cover = document.querySelector(`[data-book-id="${bookId}"]`).cloneNode(true);
+        cover.querySelector('i').classList.remove('far', 'fas'); // Убираем звезду для избранного
+        cover.querySelector('i').outerHTML = ''; // Или просто удаляем
+        favoritesGrid.appendChild(cover);
+        cover.onclick = () => {
+            document.getElementById('bookSelectWelcome').value = bookId;
+            startReading();
+        };
+    });
+    if (favorites.length === 0) {
+        favoritesGrid.innerHTML = '<p style="text-align: center; color: #999;">Нет избранных книг</p>';
+    }
 }
 
 // Инициализация
-document.getElementById('bookSelectWelcome').value = '';
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.cover i').forEach(star => {
+        const bookId = star.parentElement.parentElement.getAttribute('data-book-id');
+        if (favorites.includes(bookId)) {
+            star.classList.add('fas');
+            star.classList.remove('far');
+        }
+    });
+    renderFavorites();
+    document.getElementById('bookSelectWelcome').value = '';
+});
