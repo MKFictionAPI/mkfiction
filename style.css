@@ -1,286 +1,323 @@
 body {
-       font-family: 'Cinzel', serif;
-       margin: 0;
-       padding: 0;
-       background-color: #f4f4f9;
-       color: #333;
-       line-height: 1.6;
-       transition: all 0.3s ease;
-       height: 100vh;
-       overflow-x: hidden;
-   }
-   .container {
-       max-width: 100%;
-       margin: 0 auto;
-       padding: 10px;
-       box-sizing: border-box;
-       height: 100%;
-       display: flex;
-       flex-direction: column;
-   }
-   h1 {
-       text-align: center;
-       color: #4a4a8d;
-       margin: 10px 0;
-       font-weight: 700;
-       font-size: 28px;
-   }
-   .author-photo {
-       display: block;
-       max-width: 120px;
-       width: 100%;
-       height: auto;
-       margin: 10px auto;
-       border-radius: 50%;
-       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-       object-fit: cover;
-   }
-   /* Fallback, если фото не загрузилось */
-   .author-photo[src=""] {
-       background-color: #ddd;
-       color: #999;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       font-size: 12px;
-       text-align: center;
-   }
-   p {
-       text-align: center;
-       font-size: 16px;
-       margin: 10px 0;
-   }
-   select, button {
-       padding: 8px 12px;
-       font-size: 14px;
-       cursor: pointer;
-       border: 1px solid #4a4a8d;
-       border-radius: 5px;
-       background: white;
-       transition: all 0.2s;
-       min-width: 120px;
-   }
-   button {
-       background-color: #4a4a8d;
-       color: white;
-       margin: 5px auto;
-       display: block;
-   }
-   button:hover {
-       background-color: #3a3a6d;
-       transform: translateY(-1px);
-   }
-   .controls {
-       display: flex;
-       flex-wrap: wrap;
-       justify-content: center;
-       align-items: center;
-       gap: 8px;
-       padding: 10px;
-       background: rgba(255,255,255,0.8);
-       border-radius: 10px;
-       margin: 10px 0;
-       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-       overflow-x: auto;
-       max-width: 100%;
-   }
-   .controls label {
-       display: flex;
-       align-items: center;
-       gap: 5px;
-       font-size: 14px;
-       white-space: nowrap;
-   }
-   .controls input[type="range"] {
-       width: 80px;
-       flex-shrink: 0;
-   }
-   #bookContent {
-       background-color: white;
-       padding: 20px;
-       border: 1px solid #ddd;
-       margin: 10px 0;
-       white-space: pre-wrap;
-       font-size: 16px;
-       line-height: 1.6;
-       border-radius: 10px;
-       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-       overflow-y: auto;
-       flex: 1;
-       min-height: 300px;
-   }
-   .reader-controls {
-       display: flex;
-       flex-wrap: wrap;
-       justify-content: center;
-       gap: 10px;
-       margin: 10px 0;
-   }
-   .dark {
-       background-color: #1a1a1a;
-       color: #ddd;
-   }
-   .dark #bookContent {
-       background-color: #2a2a2a;
-       border-color: #444;
-       color: #ddd;
-   }
-   .dark h1, .dark p {
-       color: #ddd;
-   }
-   .covers-grid {
-       display: grid;
-       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-       gap: 15px;
-       margin: 15px 0;
-   }
-   .cover {
-       text-align: center;
-       cursor: pointer;
-       transition: transform 0.3s ease;
-       border-radius: 10px;
-       overflow: hidden;
-       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-       aspect-ratio: 2 / 3; /* Фиксированное соотношение для обложек 200x300 */
-       display: flex;
-       flex-direction: column;
-   }
-   .cover:hover {
-       transform: scale(1.05);
-       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-   }
-   .cover img {
-       width: 100%;
-       height: 100%; /* Заполняет контейнер по высоте */
-       object-fit: contain; /* Целиком, без обрезки/растяжки */
-       object-position: center;
-       flex-grow: 1;
-   }
-   .cover span {
-       display: block;
-       margin-top: 8px;
-       font-size: 12px;
-       color: #4a4a8d;
-       padding: 5px;
-       flex-shrink: 0;
-   }
-   .dark .cover span {
-       color: #bbb;
-   }
-   #bookmarksList {
-       margin: 10px 0;
-       padding: 10px;
-       background: white;
-       border-radius: 5px;
-       max-height: 200px;
-       overflow-y: auto;
-   }
-   #bookmarksList li {
-       cursor: pointer;
-       padding: 5px;
-       border-bottom: 1px solid #eee;
-   }
-   #bookmarksList li:hover {
-       background: #f0f0f0;
-   }
-   .dark #bookmarksList {
-       background: #2a2a2a;
-   }
-   .dark #bookmarksList li {
-       border-bottom: 1px solid #444;
-   }
-   .dark #bookmarksList li:hover {
-       background: #3a3a3a;
-   }
-   .paid-button {
-       display: block;
-       margin: 20px auto;
-       padding: 15px 30px;
-       background-color: #0088cc;
-       color: white;
-       border: none;
-       border-radius: 25px;
-       font-size: 18px;
-       cursor: pointer;
-       font-family: 'Cinzel', serif;
-       transition: background 0.2s;
-   }
-   .paid-button:hover {
-       background-color: #006699;
-   }
-   .dark .paid-button {
-       background-color: #006699;
-   }
-   .dark .paid-button:hover {
-       background-color: #004466;
-   }
-   /* Responsive для мобильных */
-   @media (max-width: 768px) {
-       .container {
-           padding: 5px;
-           height: 100vh;
-       }
-       h1 {
-           font-size: 24px;
-       }
-       p {
-           font-size: 14px;
-       }
-       .author-photo {
-           max-width: 100px;
-           width: 100%;
-       }
-       .covers-grid {
-           grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Меньше колонок на мобилке */
-           gap: 10px;
-       }
-       .cover {
-           aspect-ratio: 2 / 3; /* Сохраняем пропорции */
-       }
-       .cover img {
-           height: 100%;
-           object-fit: contain;
-       }
-       .cover span {
-           font-size: 10px;
-       }
-       .controls {
-           flex-direction: column;
-           gap: 5px;
-           overflow-x: hidden;
-       }
-       .controls select, .controls input[type="range"] {
-           width: 100%;
-           max-width: 200px;
-       }
-       #bookContent {
-           padding: 15px;
-           font-size: 14px;
-           flex: 1;
-           min-height: 0;
-       }
-       .reader-controls {
-           flex-direction: column;
-           align-items: stretch;
-       }
-       .reader-controls button {
-           width: 100%;
-       }
-   }
-   @media (max-width: 480px) {
-       .covers-grid {
-           grid-template-columns: 1fr 1fr;
-       }
-       h1 {
-           font-size: 20px;
-       }
-       .controls label {
-           font-size: 12px;
-       }
-       .cover {
-           aspect-ratio: 2 / 3;
-       }
-       .cover span {
-           font-size: 9px;
-       }
-   }
+    font-family: 'Cinzel', serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #f4f4f9 0%, #e0e0e8 100%); /* Градиент для атмосферы */
+    color: #333;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    height: 100vh;
+    overflow-x: hidden;
+}
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+h1 {
+    text-align: center;
+    color: #4a4a8d;
+    margin: 10px 0;
+    font-weight: 700;
+    font-size: 28px;
+}
+.author-photo {
+    display: block;
+    max-width: 120px;
+    width: 100%;
+    height: auto;
+    margin: 10px auto;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    object-fit: cover;
+}
+/* Fallback, если фото не загрузилось */
+.author-photo[src=""] {
+    background-color: #ddd;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    text-align: center;
+}
+p {
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
+}
+select, button {
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #4a4a8d;
+    border-radius: 5px;
+    background: white;
+    transition: all 0.2s;
+    min-width: 120px;
+}
+button {
+    background-color: #4a4a8d;
+    color: white;
+    margin: 5px auto;
+    display: block;
+    animation: pulse 2s infinite; /* Лёгкая анимация для кнопок */
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(74, 74, 141, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(74, 74, 141, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(74, 74, 141, 0); }
+}
+button:hover {
+    background-color: #3a3a6d;
+    transform: translateY(-1px);
+}
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 10px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-x: auto;
+    max-width: 100%;
+}
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+.controls input[type="range"] {
+    width: 80px;
+    flex-shrink: 0;
+}
+#bookContent {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    font-size: 16px;
+    line-height: 1.6;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    flex: 1;
+    min-height: 300px;
+    position: relative;
+}
+.progress-bar {
+    position: sticky;
+    top: 0;
+    height: 4px;
+    background: #ddd;
+    border-radius: 2px;
+    margin-bottom: 10px;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a4a8d, #0088cc);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+.reader-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+.dark {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    color: #ddd;
+}
+.dark #bookContent {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #ddd;
+}
+.dark h1, .dark p {
+    color: #ddd;
+}
+.covers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+.cover {
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    aspect-ratio: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards; /* Fade-in анимация */
+}
+.cover:nth-child(n) {
+    animation-delay: calc(var(--n) * 0.1s); /* Пошаговое появление */
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.cover:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+.cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    flex-grow: 1;
+}
+.cover span {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #4a4a8d;
+    padding: 5px;
+    flex-shrink: 0;
+}
+.dark .cover span {
+    color: #bbb;
+}
+#bookmarksList {
+    margin: 10px 0;
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+#bookmarksList li {
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+#bookmarksList li:hover {
+    background: #f0f0f0;
+}
+.dark #bookmarksList {
+    background: #2a2a2a;
+}
+.dark #bookmarksList li {
+    border-bottom: 1px solid #444;
+}
+.dark #bookmarksList li:hover {
+    background: #3a3a3a;
+}
+.paid-button {
+    display: block;
+    margin: 20px auto;
+    padding: 15px 30px;
+    background-color: #0088cc;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    transition: background 0.2s;
+}
+.paid-button:hover {
+    background-color: #006699;
+}
+.dark .paid-button {
+    background-color: #006699;
+}
+.dark .paid-button:hover {
+    background-color: #004466;
+}
+/* Responsive для мобильных */
+@media (max-width: 768px) {
+    .container {
+        padding: 5px;
+        height: 100vh;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    p {
+        font-size: 14px;
+    }
+    .author-photo {
+        max-width: 100px;
+        width: 100%;
+    }
+    .covers-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 10px;
+    }
+    .cover {
+        aspect-ratio: 2 / 3;
+    }
+    .cover img {
+        height: 100%;
+        object-fit: contain;
+    }
+    .cover span {
+        font-size: 10px;
+    }
+    .controls {
+        flex-direction: column;
+        gap: 5px;
+        overflow-x: hidden;
+    }
+    .controls select, .controls input[type="range"] {
+        width: 100%;
+        max-width: 200px;
+    }
+    #bookContent {
+        padding: 15px;
+        font-size: 14px;
+        flex: 1;
+        min-height: 0;
+    }
+    .reader-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .reader-controls button {
+        width: 100%;
+    }
+}
+@media (max-width: 480px) {
+    .covers-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    h1 {
+        font-size: 20px;
+    }
+    .controls label {
+        font-size: 12px;
+    }
+    .cover {
+        aspect-ratio: 2 / 3;
+    }
+    .cover span {
+        font-size: 9px;
+    }
+}
