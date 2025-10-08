@@ -39,7 +39,7 @@ function startReading() {
 
 async function loadBook(bookId) {
     const bookContent = document.getElementById('bookContent');
-    bookContent.classList.add('flip-animation'); // Запуск flip-анимации
+    bookContent.classList.add('flip-animation'); // Запуск улучшенной flip-анимации
     bookContent.innerHTML = '<div class="bookContent"><p>Загрузка книги...</p></div>';
     try {
         const response = await fetch(books[bookId].file);
@@ -54,7 +54,7 @@ async function loadBook(bookId) {
         bookContent.appendChild(button);
         updateChapterSelect(bookId, text);
         initProgressBar();
-        setTimeout(() => bookContent.classList.remove('flip-animation'), 1000); // Убираем анимацию после
+        setTimeout(() => bookContent.classList.remove('flip-animation'), 1200); // Время анимации
     } catch (error) {
         bookContent.innerHTML = `<div class="bookContent"><p>Ошибка загрузки книги: ${error.message}. Проверьте наличие файла ${books[bookId].file}.</p></div>`;
         console.error(error);
