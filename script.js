@@ -47,11 +47,13 @@ async function loadBook(bookId) {
         bookContent.innerHTML = `<pre style="white-space: pre-wrap;">${text}</pre>`; // Текст как pre для форматирования
         // Добавляем кнопку в конце отрывка
         const button = document.createElement('button');
-        button.textContent = 'Подписаться на полный текст';
+        button.innerHTML = '<i class="fas fa-crown"></i> Подписаться на полный текст';
         button.className = 'paid-button';
         button.onclick = openPaidChannel;
         bookContent.appendChild(button);
         updateChapterSelect(bookId, text);
+        initProgressBar(); // Инициализация прогресса
+        fadeInContent(); // Анимация появления текста
     } catch (error) {
         bookContent.innerHTML = `<p>Ошибка загрузки книги: ${error.message}. Проверьте наличие файла ${books[bookId].file}.</p>`;
         console.error(error);
@@ -120,7 +122,7 @@ function showBookmarks() {
     bookmarks.forEach((bookmark, index) => {
         const bookTitle = books[bookmark.bookId].title;
         const li = document.createElement('li');
-        li.textContent = `Книга: ${bookTitle}, Позиция: ${bookmark.scrollPosition}`;
+        li.innerHTML = `<i class="fas fa-bookmark"></i> ${bookTitle}`;
         li.style.cursor = 'pointer';
         li.onclick = () => {
             document.getElementById('bookSelect').value = bookmark.bookId;
@@ -137,7 +139,8 @@ function backToWelcome() {
 }
 
 // Обработчик кликов по обложкам
-document.querySelectorAll('.cover').forEach(cover => {
+document.querySelectorAll('.cover').forEach((cover, index) => {
+    cover.style.setProperty('--n', index);
     cover.addEventListener('click', () => {
         const bookId = cover.getAttribute('data-book-id');
         document.getElementById('bookSelectWelcome').value = bookId;
@@ -165,6 +168,28 @@ fontSlider.addEventListener('input', (e) => {
     fontValue.textContent = e.target.value;
     localStorage.setItem('fontSize', e.target.value);
 });
+
+// Прогресс чтения
+function initProgressBar() {
+    const bookContent = document.getElementById('bookContent');
+    const progressFill = document.querySelector('.progress-fill');
+    bookContent.addEventListener('scroll', () => {
+        const scrollTop = bookContent.scrollTop;
+        const scrollHeight = bookContent.scrollHeight - bookContent.clientHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        progressFill.style.width = progress + '%';
+    });
+}
+
+// Анимация появления контента
+function fadeInContent() {
+    const bookContent = document.getElementById('bookContent');
+    bookContent.style.opacity = '0';
+    bookContent.style.transition = 'opacity 0.5s ease';
+    setTimeout(() => {
+        bookContent.style.opacity = '1';
+    }, 100);
+}
 
 // Инициализация
 document.getElementById('bookSelectWelcome').value = '';
