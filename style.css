@@ -6,22 +6,28 @@ body {
        color: #333;
        line-height: 1.6;
        transition: all 0.3s ease;
+       height: 100vh;
+       overflow-x: hidden;
    }
    .container {
        max-width: 100%;
        margin: 0 auto;
        padding: 10px;
        box-sizing: border-box;
+       height: 100%;
+       display: flex;
+       flex-direction: column;
    }
    h1 {
        text-align: center;
        color: #4a4a8d;
        margin: 10px 0;
        font-weight: 700;
+       font-size: 28px;
    }
    .author-photo {
        display: block;
-       width: 150px;
+       width: 120px;
        height: auto;
        margin: 10px auto;
        border-radius: 50%;
@@ -40,6 +46,7 @@ body {
        border-radius: 5px;
        background: white;
        transition: all 0.2s;
+       min-width: 120px;
    }
    button {
        background-color: #4a4a8d;
@@ -56,24 +63,25 @@ body {
        flex-wrap: wrap;
        justify-content: center;
        align-items: center;
-       gap: 10px;
-       max-width: 100%;
-       overflow-x: auto;
+       gap: 8px;
        padding: 10px;
        background: rgba(255,255,255,0.8);
        border-radius: 10px;
        margin: 10px 0;
        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+       overflow-x: auto;
+       max-width: 100%;
    }
    .controls label {
        display: flex;
        align-items: center;
        gap: 5px;
        font-size: 14px;
+       white-space: nowrap;
    }
    .controls input[type="range"] {
-       width: 100px;
-       max-width: 100%;
+       width: 80px;
+       flex-shrink: 0;
    }
    #bookContent {
        background-color: white;
@@ -86,7 +94,8 @@ body {
        border-radius: 10px;
        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
        overflow-y: auto;
-       max-height: 70vh;
+       flex: 1;
+       min-height: 300px;
    }
    .reader-controls {
        display: flex;
@@ -145,6 +154,8 @@ body {
        padding: 10px;
        background: white;
        border-radius: 5px;
+       max-height: 200px;
+       overflow-y: auto;
    }
    #bookmarksList li {
        cursor: pointer;
@@ -189,6 +200,16 @@ body {
    @media (max-width: 768px) {
        .container {
            padding: 5px;
+           height: 100vh;
+       }
+       h1 {
+           font-size: 24px;
+       }
+       p {
+           font-size: 14px;
+       }
+       .author-photo {
+           width: 100px;
        }
        .covers-grid {
            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -203,28 +224,34 @@ body {
        .controls {
            flex-direction: column;
            gap: 5px;
+           overflow-x: hidden;
+       }
+       .controls select, .controls input[type="range"] {
+           width: 100%;
+           max-width: 200px;
        }
        #bookContent {
            padding: 15px;
            font-size: 14px;
-           max-height: 60vh;
+           flex: 1;
+           min-height: 0;
        }
-       h1 {
-           font-size: 24px;
+       .reader-controls {
+           flex-direction: column;
+           align-items: stretch;
        }
-       p {
-           font-size: 14px;
+       .reader-controls button {
+           width: 100%;
        }
    }
    @media (max-width: 480px) {
        .covers-grid {
            grid-template-columns: 1fr 1fr;
        }
-       .reader-controls {
-           flex-direction: column;
-           align-items: stretch;
+       h1 {
+           font-size: 20px;
        }
-       button {
-           width: 100%;
+       .controls label {
+           font-size: 12px;
        }
    }
