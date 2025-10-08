@@ -130,8 +130,8 @@ body {
    }
    .covers-grid {
        display: grid;
-       grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Увеличил min-width для лучшей пропорции */
-       gap: 12px; /* Уменьшил gap для компактности */
+       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+       gap: 15px;
        margin: 15px 0;
    }
    .cover {
@@ -139,11 +139,11 @@ body {
        cursor: pointer;
        transition: transform 0.3s ease;
        border-radius: 10px;
-       overflow: visible; /* Убрал hidden, чтобы не обрезать */
+       overflow: hidden;
        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-       width: 100%; /* Полная ширина колонки */
-       height: auto; /* Адаптивная высота */
-       padding: 5px; /* Небольшой padding внутри */
+       aspect-ratio: 2 / 3; /* Фиксированное соотношение для обложек 200x300 */
+       display: flex;
+       flex-direction: column;
    }
    .cover:hover {
        transform: scale(1.05);
@@ -151,20 +151,18 @@ body {
    }
    .cover img {
        width: 100%;
-       height: auto; /* Автоматическая высота */
-       max-height: 160px; /* Ограничение, чтобы не было слишком высокими */
-       object-fit: scale-down; /* Масштабирует вниз, если нужно, показывает целиком */
-       object-position: top center; /* Фокус на верхней части обложки */
-       display: block;
-       margin: 0 auto;
+       height: 100%; /* Заполняет контейнер по высоте */
+       object-fit: contain; /* Целиком, без обрезки/растяжки */
+       object-position: center;
+       flex-grow: 1;
    }
    .cover span {
        display: block;
-       margin-top: 5px;
-       font-size: 11px;
+       margin-top: 8px;
+       font-size: 12px;
        color: #4a4a8d;
-       padding: 3px;
-       word-break: break-word; /* Перенос длинных названий */
+       padding: 5px;
+       flex-shrink: 0;
    }
    .dark .cover span {
        color: #bbb;
@@ -233,23 +231,18 @@ body {
            width: 100%;
        }
        .covers-grid {
-           grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Меньше min-width на мобилке */
-           gap: 8px;
+           grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Меньше колонок на мобилке */
+           gap: 10px;
        }
        .cover {
-           width: 100%;
-           height: auto;
-           padding: 3px;
+           aspect-ratio: 2 / 3; /* Сохраняем пропорции */
        }
        .cover img {
-           width: 100%;
-           height: auto;
-           max-height: 120px; /* Компактно, но без обрезки */
-           object-fit: scale-down;
+           height: 100%;
+           object-fit: contain;
        }
        .cover span {
-           font-size: 9px;
-           margin-top: 3px;
+           font-size: 10px;
        }
        .controls {
            flex-direction: column;
@@ -285,12 +278,9 @@ body {
            font-size: 12px;
        }
        .cover {
-           padding: 2px;
-       }
-       .cover img {
-           max-height: 100px;
+           aspect-ratio: 2 / 3;
        }
        .cover span {
-           font-size: 8px;
+           font-size: 9px;
        }
    }
