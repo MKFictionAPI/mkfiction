@@ -5,8 +5,7 @@
        <meta name="viewport" content="width=device-width, initial-scale=1.0">
        <title>Писатель Мария Карташева</title>
        <link rel="stylesheet" href="style.css">
-       <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
-       <script src="https://telegram.org/js/telegram-web-app.js"></script>
+       <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
    </head>
    <body>
        <div class="container">
@@ -91,6 +90,8 @@
                        <option value="light">☀️ Светлая</option>
                        <option value="dark">🖤 Тёмная</option>
                    </select>
+                   <label for="fontSize">Размер шрифта: <span id="fontSizeValue">16</span>px</label>
+                   <input type="range" id="fontSize" min="12" max="24" value="16" step="2">
                </div>
                <div id="bookContent"></div>
                <div class="reader-controls">
